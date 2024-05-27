@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, View} from "react-native";
-import {useContext, useEffect} from "react";
+import {useContext, useEffect, useState} from "react";
 import {ItsRepository} from "@/its/ItsRepository";
 import {NativeSyntheticEvent} from "react-native/Libraries/Types/CoreEventTypes";
 import {NativeScrollEvent} from "react-native/Libraries/Components/ScrollView/ScrollView";
@@ -8,7 +8,7 @@ import {ItsContext, ItsDispatchContext} from "@/its/ItsContext";
 import {It} from "@/its/It";
 import {TapsRepository} from "@/taps/TapsRepository";
 import {Link} from "expo-router";
-import {Button, Text} from "react-native-paper";
+import {Button, Portal, Snackbar, Text} from "react-native-paper";
 
 export default function ItsList({onScroll}: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void }) {
     const db = useSQLiteContext();
@@ -36,11 +36,20 @@ export default function ItsList({onScroll}: { onScroll?: (event: NativeSynthetic
 function ItsListItem({it}: { it: It }) {
     const db = useSQLiteContext();
     const tapsRepository = new TapsRepository(db);
+    const [isSnackbarVisible, setSnackbarVisible] = useState(false);
     return <View style={styles.container}>
         <Link href={`/details/${it.id}`}>
             <Text variant="titleLarge">{it.name}</Text>
         </Link>
-        <Button mode="contained" onPress={() => tapsRepository.createTap(it)}>Tap</Button>
+        <Button mode="contained" onPress={async () => {
+            await tapsRepository.createTap(it);
+            setSnackbarVisible(true);
+        }}><Text>Tap</Text></Button>
+        <Portal>
+            <Snackbar visible={isSnackbarVisible} onDismiss={() => setSnackbarVisible(false)} duration={500}>
+                <Text style={{color: 'white'}}>{it.name} was tapped!</Text>
+            </Snackbar>
+        </Portal>
     </View>
 }
 
