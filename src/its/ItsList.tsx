@@ -24,7 +24,6 @@ export default function ItsList({onScroll}: { onScroll?: (event: NativeSynthetic
         setup()
     }, []);
 
-
     return <FlatList data={its} renderItem={({item}) => (
         <ItListItem it={item}/>
     )} onScroll={onScroll}>

@@ -3,6 +3,10 @@ import {PaperProvider} from "react-native-paper";
 import {SQLiteProvider} from "expo-sqlite";
 import {migrateDbIfNeeded} from "@/db/migrations";
 import ItsContextProvider from "@/its/ItsContextProvider";
+import dayjs from "dayjs";
+import UTC from 'dayjs/plugin/utc';
+
+dayjs.extend(UTC)
 
 export default function RootLayout() {
     return (
