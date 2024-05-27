@@ -8,7 +8,8 @@ import {ItsContext, ItsDispatchContext} from "@/its/ItsContext";
 import {It} from "@/its/It";
 import {TapsRepository} from "@/taps/TapsRepository";
 import {Link} from "expo-router";
-import {Button, Portal, Snackbar, Text} from "react-native-paper";
+import {Button, IconButton, Portal, Snackbar, Text} from "react-native-paper";
+import DeleteItButton from "@/its/DeleteItButton";
 
 export default function ItsList({onScroll}: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void }) {
     const db = useSQLiteContext();
@@ -37,19 +38,23 @@ function ItsListItem({it}: { it: It }) {
     const db = useSQLiteContext();
     const tapsRepository = new TapsRepository(db);
     const [isSnackbarVisible, setSnackbarVisible] = useState(false);
+
     return <View style={styles.container}>
         <Link href={`/details/${it.id}`}>
             <Text variant="titleLarge">{it.name}</Text>
         </Link>
-        <Button mode="contained" onPress={async () => {
-            await tapsRepository.createTap(it);
-            setSnackbarVisible(true);
-        }}><Text>Tap</Text></Button>
-        <Portal>
-            <Snackbar visible={isSnackbarVisible} onDismiss={() => setSnackbarVisible(false)} duration={500}>
-                <Text style={{color: 'white'}}>{it.name} was tapped!</Text>
-            </Snackbar>
-        </Portal>
+        <View style={styles.actionsContainer}>
+            <DeleteItButton it={it}/>
+            <Button mode="contained" onPress={async () => {
+                await tapsRepository.createTap(it);
+                setSnackbarVisible(true);
+            }}>Tap</Button>
+            <Portal>
+                <Snackbar visible={isSnackbarVisible} onDismiss={() => setSnackbarVisible(false)} duration={500}>
+                    <Text style={{color: 'white'}}>{it.name} was tapped!</Text>
+                </Snackbar>
+            </Portal>
+        </View>
     </View>
 }
 
@@ -62,4 +67,9 @@ const styles = StyleSheet.create({
         height: 48,
         padding: 4,
     },
+    actionsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 40
+    }
 });

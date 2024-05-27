@@ -24,4 +24,11 @@ export class ItsRepository {
             name
         };
     }
+
+    async deleteIt(id: number) {
+        console.debug(`Deleting it; id: ${id}`)
+        const result = await this.db.runAsync('DELETE FROM its WHERE id = ?', id);
+        console.debug(`Deleted it; id: ${id}`)
+        return result;
+    }
 }
