@@ -6,13 +6,7 @@ import {NativeSyntheticEvent} from "react-native/Libraries/Types/CoreEventTypes"
 import TapItem from "@/components/TapItem";
 
 export default function HomeScreen() {
-    const [isExtended, setExtended] = useState(true);
-    const onScroll = ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const currentScrollPosition =
-            Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
-
-        setExtended(currentScrollPosition <= 0);
-    };
+    const [isExtended, onScroll] = useScrollExtended();
     return (
         <SafeAreaView>
             <ScrollView onScroll={onScroll}>
