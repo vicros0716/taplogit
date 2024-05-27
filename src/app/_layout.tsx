@@ -1,7 +1,7 @@
 import {Stack} from 'expo-router';
 import {PaperProvider} from "react-native-paper";
 import {SQLiteProvider} from "expo-sqlite";
-import {migrateDbIfNeeded} from "@/app/db/migrations";
+import {migrateDbIfNeeded} from "@/db/migrations";
 
 export default function RootLayout() {
     return (
