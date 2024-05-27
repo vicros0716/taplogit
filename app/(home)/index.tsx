@@ -1,19 +1,26 @@
-import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet} from 'react-native';
 import {AnimatedFAB} from "react-native-paper";
-import {useState} from "react";
-import {NativeScrollEvent} from "react-native/Libraries/Components/ScrollView/ScrollView";
-import {NativeSyntheticEvent} from "react-native/Libraries/Types/CoreEventTypes";
 import TapItem from "@/components/TapItem";
+import useScrollExtended from "@/hooks/useScrollExtended";
+import {useState} from "react";
+
+type Tap = {
+    id: number;
+    name: string;
+}
 
 export default function HomeScreen() {
     const [isExtended, onScroll] = useScrollExtended();
+    const defaultTaps = [...new Array(30).keys()].map((_, i) => (
+        {id: i, name: `bar ${i}`}
+    ))
+    const [taps, setTaps] = useState<Tap[]>(defaultTaps);
     return (
         <SafeAreaView>
-            <ScrollView onScroll={onScroll}>
-                {[...new Array(100).keys()].map((_, i) => (
-                    <TapItem key={i} tap={{id: i, name: `foo ${i}`}}/>
-                ))}
-            </ScrollView>
+            <FlatList data={taps} renderItem={({item}) => (
+                <TapItem tap={item}/>
+            )} onScroll={onScroll}>
+            </FlatList>
             <AnimatedFAB icon="plus"
                          label="Label"
                          extended={isExtended}
