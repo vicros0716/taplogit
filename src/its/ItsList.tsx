@@ -1,11 +1,14 @@
-import {FlatList} from "react-native";
-import ItListItem from "@/its/ItListItem";
+import {FlatList, StyleSheet, View} from "react-native";
 import {useContext, useEffect} from "react";
 import {ItsRepository} from "@/its/ItsRepository";
 import {NativeSyntheticEvent} from "react-native/Libraries/Types/CoreEventTypes";
 import {NativeScrollEvent} from "react-native/Libraries/Components/ScrollView/ScrollView";
 import {useSQLiteContext} from "expo-sqlite";
 import {ItsContext, ItsDispatchContext} from "@/its/ItsContext";
+import {It} from "@/its/It";
+import {TapsRepository} from "@/taps/TapsRepository";
+import {Link} from "expo-router";
+import {Button, Text} from "react-native-paper";
 
 export default function ItsList({onScroll}: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void }) {
     const db = useSQLiteContext();
@@ -25,8 +28,29 @@ export default function ItsList({onScroll}: { onScroll?: (event: NativeSynthetic
     }, []);
 
     return <FlatList data={its} renderItem={({item}) => (
-        <ItListItem it={item}/>
-    )} onScroll={onScroll}>
-    </FlatList>
+        <ItsListItem it={item}/>
+    )} onScroll={onScroll}/>
 
 }
+
+function ItsListItem({it}: { it: It }) {
+    const db = useSQLiteContext();
+    const tapsRepository = new TapsRepository(db);
+    return <View style={styles.container}>
+        <Link href={`/details/${it.id}`}>
+            <Text variant="titleLarge">{it.name}</Text>
+        </Link>
+        <Button mode="contained" onPress={() => tapsRepository.createTap(it)}>Tap</Button>
+    </View>
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: 48,
+        padding: 4,
+    },
+});
