@@ -1,5 +1,5 @@
 import {FlatList} from "react-native";
-import TapItem from "@/components/TapItem";
+import TapListItem from "@/components/TapListItem";
 import {useContext, useEffect} from "react";
 import {TapsRepository} from "@/taps/TapsRepository";
 import {NativeSyntheticEvent} from "react-native/Libraries/Types/CoreEventTypes";
@@ -26,7 +26,7 @@ export default function TapsList({onScroll}: { onScroll?: (event: NativeSyntheti
 
 
     return <FlatList data={taps} renderItem={({item}) => (
-        <TapItem tap={item}/>
+        <TapListItem tap={item}/>
     )} onScroll={onScroll}>
     </FlatList>
 

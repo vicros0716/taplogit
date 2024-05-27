@@ -9,7 +9,7 @@ type Props = {
     }
 }
 
-export default function TapItem({tap}: Props) {
+export default function TapListItem({tap}: Props) {
     return <TouchableRipple style={styles.container} onPress={() => console.log(tap)}><View>
         <Link href={`/tapDetails/${tap.id}`}>
             <Text variant="titleLarge">{tap.name}</Text>
