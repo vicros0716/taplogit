@@ -6,7 +6,7 @@ type SQLQuery = (db: SQLiteDatabase) => Promise<void>;
 const MIGRATIONS: Migration[] = [
     [async (db) => await db.execAsync(`
 PRAGMA journal_mode = 'wal';
-CREATE TABLE taps (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL);
+CREATE TABLE its (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL);
 `)]
 ];
 

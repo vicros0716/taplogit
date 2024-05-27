@@ -1,19 +1,19 @@
 import {AnimatedFAB} from "react-native-paper";
-import CreateTapDialog from "@/taps/CreateTapDialog";
+import CreateItDialog from "@/its/CreateItDialog";
 import {useState} from "react";
 import {StyleSheet} from "react-native";
 
-export default function CreateTapFAB({extended}: { extended: boolean }) {
+export default function CreateItFAB({extended}: { extended: boolean }) {
     const [visible, setVisible] = useState(false);
     return (
         <>
             <AnimatedFAB icon="plus"
-                         label="Create Tap"
+                         label="Create It"
                          extended={extended}
                          onPress={() => setVisible(true)}
                          animateFrom="right"
                          style={[styles.fab]}/>
-            <CreateTapDialog visible={visible} onDismiss={() => setVisible(false)}/>
+            <CreateItDialog visible={visible} onDismiss={() => setVisible(false)}/>
         </>
     )
 }

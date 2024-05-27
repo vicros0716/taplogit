@@ -1,16 +1,16 @@
 import { useLocalSearchParams } from 'expo-router';
 import { View, Text, StyleSheet } from 'react-native';
 import {useContext} from "react";
-import {TapsContext} from "@/taps/TapsContext";
+import {ItsContext} from "@/its/ItsContext";
 
-export default function TapDetailsScreen() {
+export default function ItDetailsScreen() {
     const { id } = useLocalSearchParams();
-    const taps = useContext(TapsContext);
-    const tap = taps.find((tap) => tap.id.toString() === id);
+    const its = useContext(ItsContext);
+    const it = its.find((it) => it.id.toString() === id);
 
     return (
         <View style={styles.container}>
-            <Text>{id} {tap?.name} </Text>
+            <Text>{id} {it?.name} </Text>
         </View>
     );
 }

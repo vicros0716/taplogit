@@ -1,4 +1,4 @@
-export type Tap = {
+export type It = {
     id: number;
     name: string;
 }

@@ -1,16 +1,16 @@
 import {StyleSheet, View} from "react-native";
 import {Text} from 'react-native-paper';
 import {Link} from "expo-router";
-import {Tap} from "@/taps/Tap";
+import {It} from "@/its/It";
 
 type Props = {
-    tap: Tap
+    it: It
 }
 
-export default function TapListItem({tap}: Props) {
+export default function ItListItem({it}: Props) {
     return <View style={styles.container}>
-        <Link href={`/tapDetails/${tap.id}`}>
-            <Text variant="titleLarge">{tap.name}</Text>
+        <Link href={`/details/${it.id}`}>
+            <Text variant="titleLarge">{it.name}</Text>
         </Link>
     </View>
 }

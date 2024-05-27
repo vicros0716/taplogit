@@ -13,7 +13,7 @@ export default function HomeLayout() {
                 },
             }}>
             <Stack.Screen name="index" options={{title: 'Tap Log It'}}/>
-            <Stack.Screen name="tapDetails/[id]" options={{title: 'What in the?'}}/>
+            <Stack.Screen name="details/[id]" options={{title: 'What in the?'}}/>
         </Stack>
     );
 }
