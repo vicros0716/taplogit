@@ -1,20 +1,18 @@
 import {StyleSheet, View} from "react-native";
-import {Text, TouchableRipple} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {Link} from "expo-router";
+import {Tap} from "@/taps/Tap";
 
 type Props = {
-    tap: {
-        id: number;
-        name: string;
-    }
+    tap: Tap
 }
 
 export default function TapListItem({tap}: Props) {
-    return <TouchableRipple style={styles.container} onPress={() => console.log(tap)}><View>
+    return <View style={styles.container}>
         <Link href={`/tapDetails/${tap.id}`}>
             <Text variant="titleLarge">{tap.name}</Text>
         </Link>
-    </View></TouchableRipple>
+    </View>
 }
 
 const styles = StyleSheet.create({
