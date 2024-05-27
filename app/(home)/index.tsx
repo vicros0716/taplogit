@@ -32,7 +32,7 @@ export default function HomeScreen() {
             )} onScroll={onScroll}>
             </FlatList>
             <AnimatedFAB icon="plus"
-                         label="Label"
+                         label="Create Tap"
                          extended={isExtended}
                          onPress={() => console.info('Pressed')}
                          animateFrom="right"
