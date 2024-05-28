@@ -8,9 +8,14 @@ export class ItsRepository {
         this.db = db;
     }
 
+    async debug(): Promise<void> {
+        const tables = await this.db.getAllAsync('SELECT * FROM sqlite_schema');
+        console.log(tables);
+    }
+
     async getIts(): Promise<It[]> {
         console.debug('Getting all its');
-        const result = await this.db.getAllAsync<It>('SELECT * from its');
+        const result = await this.db.getAllAsync<It>('SELECT * FROM its');
         console.debug('Got all its')
         return result;
     }
