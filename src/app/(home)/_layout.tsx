@@ -12,8 +12,8 @@ export default function HomeLayout() {
                     fontWeight: 'bold',
                 },
             }}>
-            <Stack.Screen name="index" options={{title: 'Tap Log It'}}/>
-            <Stack.Screen name="details/[id]" options={{title: 'What in the?'}}/>
+            <Stack.Screen name="index"/>
+            <Stack.Screen name="details/[id]"/>
         </Stack>
     );
 }

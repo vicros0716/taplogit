@@ -1,4 +1,4 @@
-import {useLocalSearchParams} from 'expo-router';
+import {Stack, useLocalSearchParams} from 'expo-router';
 import {StyleSheet, Text, View} from 'react-native';
 import {useContext} from "react";
 import {ItsContext} from "@/its/ItsContext";
@@ -12,7 +12,8 @@ export default function ItDetailsScreen() {
 
     return (
         <View style={styles.container}>
-            <Text>{id} {it?.name} </Text>
+            <Stack.Screen options={{title: it.name}}/>
+            <Text>{id} {it?.name}</Text>
             <TapsList it={it}/>
         </View>
     );

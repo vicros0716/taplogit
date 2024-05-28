@@ -1,5 +1,6 @@
 import {SQLiteDatabase} from 'expo-sqlite';
 import {It} from "@/its/It";
+import dayjs from "dayjs";
 
 export class ItsRepository {
     private db: SQLiteDatabase;
@@ -13,9 +14,10 @@ export class ItsRepository {
         console.log(tables);
     }
 
-    async getIts(): Promise<It[]> {
+    async getIts(includeDeleted: boolean = false): Promise<It[]> {
+        console.log(includeDeleted);
         console.debug('Getting all its');
-        const result = await this.db.getAllAsync<It>('SELECT * FROM its');
+        const result = await this.db.getAllAsync<It>('SELECT * FROM its' + (includeDeleted ? ';' : ' WHERE deleted_at IS NULL;'));
         console.debug('Got all its')
         return result;
     }
@@ -32,8 +34,9 @@ export class ItsRepository {
 
     async deleteIt(id: number) {
         console.debug(`Deleting it; id: ${id}`)
-        const result = await this.db.runAsync('DELETE FROM its WHERE id = ?', id);
-        console.debug(`Deleted it; id: ${id}`)
+        const deletedAt = dayjs.utc().toISOString()
+        const result = await this.db.runAsync('UPDATE its SET deleted_at = ? WHERE id = ?', deletedAt, id);
+        console.debug(`Deleted it; id: ${id}, deleted_at: ${deletedAt}`)
         return result;
     }
 }

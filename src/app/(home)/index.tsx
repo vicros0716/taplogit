@@ -2,12 +2,21 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 import useScrollExtended from "@/hooks/useScrollExtended";
 import CreateItFAB from "@/its/CreateItFAB";
 import ItsList from "@/its/ItsList";
+import {Stack} from "expo-router";
+import {Switch, Text} from "react-native-paper";
+import {useState} from "react";
 
 export default function HomeScreen() {
     const [isExtended, onScroll] = useScrollExtended();
+    const [showDeleted, setShowDeleted] = useState(false);
     return (
         <SafeAreaView style={styles.container}>
-            <ItsList onScroll={onScroll}/>
+            <Stack.Screen options={{
+                title: 'Tap Log It',
+                headerRight: () => <><Text style={{color: 'white'}}>Show Deleted</Text><Switch value={showDeleted}
+                                                                                               onValueChange={setShowDeleted}/></>
+            }}/>
+            <ItsList onScroll={onScroll} showArchived={showDeleted}/>
             <CreateItFAB extended={isExtended}/>
         </SafeAreaView>
     );

@@ -11,22 +11,22 @@ import {Link} from "expo-router";
 import {Button, IconButton, Portal, Snackbar, Text} from "react-native-paper";
 import DeleteItButton from "@/its/DeleteItButton";
 
-export default function ItsList({onScroll}: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void }) {
+export default function ItsList({onScroll, showArchived}: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void, showArchived: boolean }) {
     const db = useSQLiteContext();
     const its = useContext(ItsContext);
     const itsDispatch = useContext(ItsDispatchContext);
 
-    async function setup() {
-        const result = await new ItsRepository(db).getIts();
-        itsDispatch({
-            type: 'fetched',
-            its: result,
-        })
-    }
-
     useEffect(() => {
+        async function setup() {
+            const result = await new ItsRepository(db).getIts(showArchived);
+            itsDispatch({
+                type: 'fetched',
+                its: result,
+            })
+        }
+
         setup()
-    }, []);
+    }, [showArchived]);
 
     return <FlatList data={its} renderItem={({item}) => (
         <ItsListItem it={item}/>
