@@ -14,12 +14,14 @@ export default function DeleteItButton({it}: { it: It }) {
         setVisible(false);
         setErrorCode('');
     }
-    return <><IconButton icon="delete" onPress={() => setVisible(true)}/>
+    return <>
+        <IconButton icon="delete" onPress={() => setVisible(true)}/>
         <Portal>
             <Dialog visible={visible} onDismiss={dismiss}>
                 <Dialog.Content>
                     <Text>Are you certain you want to delete {it.name}? You will lose all history</Text>
-                    <Text style={{color: 'red'}}>{errorCode === 'FOREIGN KEY constraint failed' ? `Cannot delete ${it.name} because of existing taps` : errorCode}</Text>
+                    <Text
+                        style={{color: 'red'}}>{errorCode === 'FOREIGN KEY constraint failed' ? `Cannot delete ${it.name} because of existing taps` : errorCode}</Text>
                 </Dialog.Content>
                 <Dialog.Actions>
                     <Button onPress={dismiss}>Cancel</Button>

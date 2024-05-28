@@ -10,6 +10,7 @@ import {TapsRepository} from "@/taps/TapsRepository";
 import {Link} from "expo-router";
 import {Button, IconButton, Portal, Snackbar, Text} from "react-native-paper";
 import DeleteItButton from "@/its/DeleteItButton";
+import RestoreItButton from "@/its/RestoreItButton";
 
 export default function ItsList({onScroll, showArchived}: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void, showArchived: boolean }) {
     const db = useSQLiteContext();
@@ -44,7 +45,7 @@ function ItsListItem({it}: { it: It }) {
             <Text variant="titleLarge">{it.name}</Text>
         </Link>
         <View style={styles.actionsContainer}>
-            <DeleteItButton it={it}/>
+            {it.isDeleted ? <RestoreItButton it={it}/> : <DeleteItButton it={it}/>}
             <Button mode="contained" onPress={async () => {
                 await tapsRepository.createTap(it);
                 setSnackbarVisible(true);
