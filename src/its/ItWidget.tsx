@@ -1,22 +1,24 @@
 import {FlexWidget, TextWidget} from "react-native-android-widget";
+import {It} from "@/its/It";
 
-export default function ItWidget() {
+export default function ItWidget({it}: {it: It}) {
     return (
         <FlexWidget
             style={{
-                height: 'match_parent',
-                width: 'match_parent',
-                justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#ffffff',
                 borderRadius: 16,
+                height: 'match_parent',
+                justifyContent: 'center',
+                width: 'match_parent',
             }}
+            clickAction="PRESS"
+            clickActionData={{it: it}}
         >
             <TextWidget
-                text="Hello"
+                text={it.name}
                 style={{
                     fontSize: 32,
-                    fontFamily: 'Inter',
                     color: '#000000',
                 }}
             />
