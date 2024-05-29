@@ -30,5 +30,18 @@
       </intent-filter>
     </activity>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>
+    <service android:name="com.reactnativeandroidwidget.RNWidgetCollectionService" android:permission="android.permission.BIND_REMOTEVIEWS" />
+    <receiver
+        android:name=".widget.It"
+        android:exported="false"
+        android:label="My It Widget">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        <action android:name="com.yourapppackage.WIDGET_CLICK" />
+      </intent-filter>
+      <meta-data
+          android:name="android.appwidget.provider"
+          android:resource="@xml/widgetprovider_it" />
+    </receiver>
   </application>
 </manifest>
