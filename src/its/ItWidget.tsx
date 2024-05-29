@@ -12,7 +12,7 @@ export default function ItWidget({it}: {it: It}) {
                 justifyContent: 'center',
                 width: 'match_parent',
             }}
-            clickAction="PRESS"
+            clickAction="TAP"
             clickActionData={{it: it}}
         >
             <TextWidget
