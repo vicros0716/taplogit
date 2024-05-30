@@ -8,7 +8,7 @@ import {ItsContext, ItsDispatchContext} from "@/its/ItsContext";
 import {It} from "@/its/It";
 import {TapsRepository} from "@/taps/TapsRepository";
 import {Link} from "expo-router";
-import {Button, IconButton, Portal, Snackbar, Text} from "react-native-paper";
+import {Button, Portal, Snackbar, Text} from "react-native-paper";
 import DeleteItButton from "@/its/DeleteItButton";
 import RestoreItButton from "@/its/RestoreItButton";
 
@@ -19,14 +19,18 @@ export default function ItsList({onScroll, showArchived}: {
     const db = useSQLiteContext();
     const its = useContext(ItsContext);
     const itsDispatch = useContext(ItsDispatchContext);
+    const itsRepository = new ItsRepository(db);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         async function setup() {
-            const result = await new ItsRepository(db).getIts(showArchived);
+            setRefreshing(true);
+            const result = await itsRepository.getIts(showArchived);
             itsDispatch({
                 type: 'fetched',
                 its: result,
             })
+            setRefreshing(false);
         }
 
         setup()
@@ -34,7 +38,15 @@ export default function ItsList({onScroll, showArchived}: {
 
     return <FlatList data={its} renderItem={({item}) => (
         <ItsListItem it={item}/>
-    )} onScroll={onScroll}/>
+    )} onScroll={onScroll} refreshing={refreshing} onRefresh={async() => {
+        setRefreshing(true);
+        const result = await itsRepository.getIts(showArchived);
+        itsDispatch({
+            type: 'fetched',
+            its: result,
+        })
+        setRefreshing(false);
+    }}/>
 }
 
 function ItsListItem({it}: { it: It }) {

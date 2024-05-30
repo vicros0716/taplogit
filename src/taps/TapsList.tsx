@@ -10,10 +10,14 @@ export default function TapsList({it}: { it: It }) {
     const [taps, setTaps] = useState<Tap[]>([]);
 
     const db = useSQLiteContext();
+    const tapsRepository = new TapsRepository(db);
+    const [refreshing, setRefreshing] = useState(false);
 
     async function setup() {
-        const result = await new TapsRepository(db).getTaps(it);
+        setRefreshing(true);
+        const result = await tapsRepository.getTaps(it);
         setTaps(result);
+        setRefreshing(false);
     }
 
     useEffect(() => {
@@ -22,7 +26,12 @@ export default function TapsList({it}: { it: It }) {
 
     return <FlatList data={taps} renderItem={({item}) => (
         <TapsListItem tap={item}/>
-    )}/>
+    )} refreshing={refreshing} onRefresh={async () => {
+        setRefreshing(true);
+        const result = await tapsRepository.getTaps(it);
+        setTaps(result);
+        setRefreshing(false);
+    }}/>
 }
 
 function TapsListItem({tap}: { tap: Tap }) {
