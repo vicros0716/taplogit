@@ -12,7 +12,10 @@ import {Button, IconButton, Portal, Snackbar, Text} from "react-native-paper";
 import DeleteItButton from "@/its/DeleteItButton";
 import RestoreItButton from "@/its/RestoreItButton";
 
-export default function ItsList({onScroll, showArchived}: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void, showArchived: boolean }) {
+export default function ItsList({onScroll, showArchived}: {
+    onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void,
+    showArchived: boolean
+}) {
     const db = useSQLiteContext();
     const its = useContext(ItsContext);
     const itsDispatch = useContext(ItsDispatchContext);
@@ -40,7 +43,7 @@ function ItsListItem({it}: { it: It }) {
     const [isSnackbarVisible, setSnackbarVisible] = useState(false);
 
     return <View style={styles.container}>
-        <Link href={`/details/${it.id}`}>
+        <Link href={`/details/${it.id}`} style={{flexGrow: 1}}>
             <Text variant="titleLarge">{it.name}</Text>
         </Link>
         <View style={styles.actionsContainer}>
