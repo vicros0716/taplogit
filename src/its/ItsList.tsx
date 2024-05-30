@@ -32,7 +32,6 @@ export default function ItsList({onScroll, showArchived}: { onScroll?: (event: N
     return <FlatList data={its} renderItem={({item}) => (
         <ItsListItem it={item}/>
     )} onScroll={onScroll}/>
-
 }
 
 function ItsListItem({it}: { it: It }) {

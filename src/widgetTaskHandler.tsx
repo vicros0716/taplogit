@@ -19,10 +19,12 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
             break;
 
         case 'WIDGET_UPDATE':
+            props.renderWidget(<ItWidget it={{id: 1, name: 'widget updated', isDeleted: false}} />)
             // Not needed for now
             break;
 
         case 'WIDGET_RESIZED':
+            props.renderWidget(<ItWidget it={{id: 1, name: 'widget updated', isDeleted: false}} />)
             // Not needed for now
             break;
 

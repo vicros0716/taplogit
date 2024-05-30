@@ -43,5 +43,10 @@
           android:name="android.appwidget.provider"
           android:resource="@xml/widgetprovider_it" />
     </receiver>
+    <activity android:name=".widget.WidgetConfigurationActivity" android:exported="true">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+      </intent-filter>
+    </activity>
   </application>
 </manifest>
