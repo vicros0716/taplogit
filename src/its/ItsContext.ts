@@ -1,6 +1,14 @@
-import {createContext, Dispatch} from "react";
+import {createContext} from "react";
 import {It} from "@/its/It";
-import {ItsAction} from "@/its/ItsAction";
 
-export const ItsContext = createContext<It[]>([]);
-export const ItsDispatchContext = createContext<Dispatch<ItsAction>>(null as unknown as Dispatch<ItsAction>);
+export const ItsContext = createContext<{
+    its: It[], refreshIts: () => Promise<void>, showDeleted: boolean,
+    setShowDeleted: (showDeleted: boolean) => void
+}>({
+    its: [],
+    refreshIts: async () => {
+    },
+    showDeleted: false,
+    setShowDeleted: () => {
+    }
+});

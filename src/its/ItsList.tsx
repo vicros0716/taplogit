@@ -1,34 +1,43 @@
 import {FlatList, StyleSheet, View} from "react-native";
 import {useContext, useEffect, useState} from "react";
-import {ItsRepository} from "@/its/ItsRepository";
 import {NativeSyntheticEvent} from "react-native/Libraries/Types/CoreEventTypes";
 import {NativeScrollEvent} from "react-native/Libraries/Components/ScrollView/ScrollView";
 import {useSQLiteContext} from "expo-sqlite";
-import {ItsContext, ItsDispatchContext} from "@/its/ItsContext";
 import {It} from "@/its/It";
 import {TapsRepository} from "@/taps/TapsRepository";
 import {Link} from "expo-router";
 import {Button, Portal, Snackbar, Text} from "react-native-paper";
 import DeleteItButton from "@/its/DeleteItButton";
 import RestoreItButton from "@/its/RestoreItButton";
-import useFetchIts from "@/its/useFetchIts";
+import {ItsContext} from "@/its/ItsContext";
 
-export default function ItsList({onScroll, showArchived}: {
+export default function ItsList({onScroll}: {
     onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void,
-    showArchived: boolean
 }) {
-    const its = useContext(ItsContext);
-    const [fetchIts, refreshing] = useFetchIts();
-
+    const {its, refreshIts, showDeleted} = useContext(ItsContext);
+    const [refreshing, setRefreshing] = useState(false);
     useEffect(() => {
-        fetchIts(showArchived)
-    }, [showArchived]);
+        async function setup() {
+            setRefreshing(true);
+            await refreshIts();
+            setRefreshing(false);
+        }
 
-    return <FlatList data={its} renderItem={({item}) => (
-        <ItsListItem it={item}/>
-    )} onScroll={onScroll} refreshing={refreshing} onRefresh={async () => {
-        fetchIts(showArchived);
-    }}/>
+        setup();
+    }, [showDeleted]);
+
+    return <FlatList
+        data={its}
+        renderItem={({item}) => (
+            <ItsListItem it={item}/>
+        )}
+        onScroll={onScroll}
+        refreshing={refreshing}
+        onRefresh={async () => {
+            setRefreshing(true);
+            await refreshIts();
+            setRefreshing(false);
+        }}/>
 }
 
 function ItsListItem({it}: { it: It }) {

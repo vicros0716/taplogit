@@ -7,7 +7,7 @@ import {assertedNonNull} from "@/util/assert";
 
 export default function ItDetailsScreen() {
     const {id} = useLocalSearchParams();
-    const its = useContext(ItsContext);
+    const {its} = useContext(ItsContext);
     const it = assertedNonNull(its.find((it) => it.id.toString() === id));
 
     return (

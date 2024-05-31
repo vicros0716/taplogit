@@ -1,19 +1,20 @@
 import {Button, Dialog, IconButton, Portal, Text} from "react-native-paper";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {It} from "@/its/It";
 import useItsRepository from "@/its/useItsRepository";
 import {getSQLiteErrorCode} from "@/db/getSQLiteErrorCode";
-import useFetchIts from "@/its/useFetchIts";
+import {ItsContext} from "@/its/ItsContext";
 
 export default function DeleteItButton({it}: { it: It }) {
     const itsRepository = useItsRepository();
-    const [fetchIts] = useFetchIts();
+    const {refreshIts} = useContext(ItsContext);
     const [visible, setVisible] = useState(false);
     const [errorCode, setErrorCode] = useState('');
     const dismiss = () => {
         setVisible(false);
         setErrorCode('');
     }
+    // TODO(polish): Set a loading indicator after pressing Delete
     return <>
         <IconButton icon="delete" onPress={() => setVisible(true)}/>
         <Portal>
@@ -28,7 +29,7 @@ export default function DeleteItButton({it}: { it: It }) {
                     <Button onPress={async () => {
                         try {
                             await itsRepository.deleteIt(it.id);
-                            await fetchIts(true);
+                            await refreshIts();
                             dismiss();
                         } catch (error: unknown) {
                             setErrorCode(getSQLiteErrorCode(error));

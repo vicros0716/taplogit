@@ -1,13 +1,17 @@
 import {Button, Dialog, TextInput} from "react-native-paper";
 import {useContext, useState} from "react";
+import {ItsContext} from "@/its/ItsContext";
 import useItsRepository from "@/its/useItsRepository";
-import {ItsDispatchContext} from "@/its/ItsContext";
 
-export default function CreateItDialog({visible, onDismiss}: { visible: boolean, onDismiss: () => void }) {
+export default function CreateItDialog({visible, onDismiss}: {
+    visible: boolean,
+    onDismiss: () => void,
+}) {
     const [name, setName] = useState("");
-    const itsDispatch = useContext(ItsDispatchContext);
+    const {refreshIts} = useContext(ItsContext);
     const itsRepository = useItsRepository();
 
+    // TODO(polish): Set a loading indicator after pressing Create
     return (<Dialog visible={visible} onDismiss={onDismiss}>
         <Dialog.Content>
             <TextInput label="Name" value={name} onChangeText={setName}></TextInput>
@@ -15,11 +19,8 @@ export default function CreateItDialog({visible, onDismiss}: { visible: boolean,
         <Dialog.Actions>
             <Button onPress={onDismiss}>Cancel</Button>
             <Button onPress={async () => {
-                const it = await itsRepository.createIt(name);
-                itsDispatch({
-                    type: 'added',
-                    it
-                })
+                await itsRepository.createIt(name);
+                await refreshIts();
                 onDismiss();
                 setName("");
             }} mode="contained" disabled={name === ''}>Create</Button>
