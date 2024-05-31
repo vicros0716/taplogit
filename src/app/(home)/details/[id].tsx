@@ -1,20 +1,22 @@
-import {Stack, useLocalSearchParams} from 'expo-router';
-import {StyleSheet, Text, View} from 'react-native';
-import {useContext} from "react";
-import {ItsContext} from "@/its/ItsContext";
-import TapsList from "@/taps/TapsList";
-import {assertedNonNull} from "@/util/assert";
+import { Stack, useLocalSearchParams } from 'expo-router';
+import { StyleSheet, Text, View } from 'react-native';
+import { useContext } from 'react';
+import { ItsContext } from '@/its/ItsContext';
+import TapsList from '@/taps/TapsList';
+import { assertedNonNull } from '@/util/assert';
 
 export default function ItDetailsScreen() {
-    const {id} = useLocalSearchParams();
-    const {its} = useContext(ItsContext);
+    const { id } = useLocalSearchParams();
+    const { its } = useContext(ItsContext);
     const it = assertedNonNull(its.find((it) => it.id.toString() === id));
 
     return (
         <View style={styles.container}>
-            <Stack.Screen options={{title: it.name}}/>
-            <Text>{id} {it?.name}</Text>
-            <TapsList it={it}/>
+            <Stack.Screen options={{ title: it.name }} />
+            <Text>
+                {id} {it?.name}
+            </Text>
+            <TapsList it={it} />
         </View>
     );
 }

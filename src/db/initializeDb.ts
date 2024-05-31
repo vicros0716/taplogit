@@ -1,5 +1,5 @@
-import {SQLiteDatabase} from "expo-sqlite";
-import {migrateDbIfNeeded} from "@/db/migrations";
+import { SQLiteDatabase } from 'expo-sqlite';
+import { migrateDbIfNeeded } from '@/db/migrations';
 
 export async function initializeDb(db: SQLiteDatabase) {
     await migrateDbIfNeeded(db);

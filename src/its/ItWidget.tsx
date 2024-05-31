@@ -1,7 +1,7 @@
-import {FlexWidget, TextWidget} from "react-native-android-widget";
-import {It} from "@/its/It";
+import { FlexWidget, TextWidget } from 'react-native-android-widget';
+import { It } from '@/its/It';
 
-export default function ItWidget({it}: {it: It}) {
+export default function ItWidget({ it }: { it: It }) {
     return (
         <FlexWidget
             style={{
@@ -13,8 +13,7 @@ export default function ItWidget({it}: {it: It}) {
                 width: 'match_parent',
             }}
             clickAction="TAP"
-            clickActionData={{it: it}}
-        >
+            clickActionData={{ it: it }}>
             <TextWidget
                 text={it.name}
                 style={{
@@ -23,5 +22,5 @@ export default function ItWidget({it}: {it: It}) {
                 }}
             />
         </FlexWidget>
-    )
+    );
 }

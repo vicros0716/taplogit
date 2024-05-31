@@ -1,5 +1,5 @@
-import {useSQLiteContext} from "expo-sqlite";
-import {ItsRepository} from "@/its/ItsRepository";
+import { useSQLiteContext } from 'expo-sqlite';
+import { ItsRepository } from '@/its/ItsRepository';
 
 export default function useItsRepository() {
     const db = useSQLiteContext();
