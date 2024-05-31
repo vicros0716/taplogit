@@ -1,26 +1,26 @@
 import { FlatList, View } from 'react-native';
-import { useSQLiteContext } from 'expo-sqlite';
-import { useEffect, useState } from 'react';
-import { TapsRepository } from '@/taps/TapsRepository';
+import { useCallback, useEffect, useState } from 'react';
 import { It } from '@/its/It';
 import { Tap } from '@/taps/Tap';
 import { Text } from 'react-native-paper';
+import useTapsRepository from '@/taps/useTapsRepository';
 
 export default function TapsList({ it }: { it: It }) {
     const [taps, setTaps] = useState<Tap[]>([]);
 
-    const db = useSQLiteContext();
-    const tapsRepository = new TapsRepository(db);
+    const tapsRepository = useTapsRepository();
     const [refreshing, setRefreshing] = useState(false);
-
-    async function setup() {
-        setRefreshing(true);
-        const result = await tapsRepository.getTaps(it);
-        setTaps(result);
-        setRefreshing(false);
-    }
+    const refreshTaps = useCallback(async () => {
+        setTaps(await tapsRepository.getTaps(it));
+    }, [it]);
 
     useEffect(() => {
+        async function setup() {
+            setRefreshing(true);
+            await refreshTaps();
+            setRefreshing(false);
+        }
+
         setup();
     }, []);
 
@@ -31,8 +31,7 @@ export default function TapsList({ it }: { it: It }) {
             refreshing={refreshing}
             onRefresh={async () => {
                 setRefreshing(true);
-                const result = await tapsRepository.getTaps(it);
-                setTaps(result);
+                await refreshTaps();
                 setRefreshing(false);
             }}
         />
@@ -42,7 +41,7 @@ export default function TapsList({ it }: { it: It }) {
 function TapsListItem({ tap }: { tap: Tap }) {
     return (
         <View>
-            <Text>{tap.tappedAt.toISOString()}</Text>
+            <Text variant="bodyLarge">{tap.tappedAt.format('MMM D, YYYY @ hh:mm A')}</Text>
         </View>
     );
 }

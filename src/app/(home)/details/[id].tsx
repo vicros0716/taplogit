@@ -13,9 +13,6 @@ export default function ItDetailsScreen() {
     return (
         <View style={styles.container}>
             <Stack.Screen options={{ title: it.name }} />
-            <Text>
-                {id} {it?.name}
-            </Text>
             <TapsList it={it} />
         </View>
     );
