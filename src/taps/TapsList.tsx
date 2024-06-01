@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { SectionList, StyleSheet, View } from 'react-native';
 import { IconButton, Text } from 'react-native-paper';
 import { Tap } from '@/taps/Tap';
+import useTapsRepository from '@/taps/useTapsRepository';
 
 export default function TapsList({
     taps,
@@ -13,6 +14,7 @@ export default function TapsList({
     refreshTaps: () => Promise<void>;
     coalesceBy: OpUnitType;
 }) {
+    const tapsRepository = useTapsRepository();
     const [refreshing, setRefreshing] = useState(false);
 
     const coalescedTaps = taps.reduce(
@@ -44,7 +46,17 @@ export default function TapsList({
     return (
         <SectionList
             sections={data}
-            renderItem={({ item }) => <TapsListItem tap={item} />}
+            renderItem={({ item }) => (
+                <TapsListItem
+                    tap={item}
+                    deleteTap={async () => {
+                        setRefreshing(true);
+                        await tapsRepository.deleteTap(item.id);
+                        await refreshTaps();
+                        setRefreshing(false);
+                    }}
+                />
+            )}
             renderSectionHeader={({ section: { title } }) => <TapsListSectionHeader title={title} />}
             refreshing={refreshing}
             onRefresh={async () => {
@@ -64,11 +76,11 @@ function TapsListSectionHeader({ title }: { title: string }) {
     );
 }
 
-function TapsListItem({ tap }: { tap: Tap }) {
+function TapsListItem({ tap, deleteTap }: { tap: Tap; deleteTap: () => Promise<void> }) {
     return (
         <View style={styles.itemContainer}>
             <Text variant="bodyMedium">{tap.tappedAt.format('MMM D, YYYY @ hh:mm A')}</Text>
-            <IconButton icon="delete" />
+            <IconButton icon="delete" onPress={deleteTap} />
         </View>
     );
 }

@@ -33,4 +33,11 @@ export class TapsRepository {
         console.debug(`Created new tap; it: ${it.name}, id: ${result.lastInsertRowId}`);
         return result;
     }
+
+    async deleteTap(id: number) {
+        console.debug(`Deleting it; id: ${id}`);
+        const result = await this.db.runAsync('DELETE FROM taps WHERE id = ?', id);
+        console.debug(`Deleted it; id: ${id}`);
+        return result;
+    }
 }
