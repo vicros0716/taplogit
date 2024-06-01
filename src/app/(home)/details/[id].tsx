@@ -1,6 +1,6 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useContext, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { ItsContext } from '@/its/ItsContext';
 import TapsPage from '@/taps/TapsPage';
@@ -13,7 +13,7 @@ export default function ItDetailsScreen() {
     const it = assertedNonNull(its.find((it) => it.id.toString() === id));
 
     return (
-        <View style={styles.container}>
+        <View>
             <Stack.Screen
                 options={{
                     title: it.name,
@@ -30,11 +30,3 @@ export default function ItDetailsScreen() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-});

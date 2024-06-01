@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { VictoryBar, VictoryChart, VictoryLabel, VictoryTheme } from 'victory-native';
 import { Tap } from '@/taps/Tap';
 
@@ -19,7 +19,7 @@ export default function TapsGraph({ taps }: { taps: Tap[] }) {
         count,
     }));
     return (
-        <View style={styles.container}>
+        <View>
             <VictoryChart scale={{ x: 'time' }} domainPadding={{ x: 24 }} theme={VictoryTheme.material}>
                 <VictoryBar
                     data={data}
@@ -32,12 +32,3 @@ export default function TapsGraph({ taps }: { taps: Tap[] }) {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f5fcff',
-    },
-});
