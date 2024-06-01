@@ -1,11 +1,11 @@
+import { Stack } from 'expo-router';
+import { useContext } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
+import { Switch, Text } from 'react-native-paper';
 import useScrollExtended from '@/hooks/useScrollExtended';
 import CreateItFAB from '@/its/CreateItFAB';
-import ItsList from '@/its/ItsList';
-import { Stack } from 'expo-router';
-import { Switch, Text } from 'react-native-paper';
-import { useContext } from 'react';
 import { ItsContext } from '@/its/ItsContext';
+import ItsList from '@/its/ItsList';
 
 export default function HomeScreen() {
     const [isExtended, onScroll] = useScrollExtended();

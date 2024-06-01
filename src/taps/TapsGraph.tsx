@@ -1,7 +1,7 @@
-import { VictoryBar, VictoryChart, VictoryLabel, VictoryTheme } from 'victory-native';
-import { StyleSheet, View } from 'react-native';
-import { Tap } from '@/taps/Tap';
 import dayjs from 'dayjs';
+import { StyleSheet, View } from 'react-native';
+import { VictoryBar, VictoryChart, VictoryLabel, VictoryTheme } from 'victory-native';
+import { Tap } from '@/taps/Tap';
 
 export default function TapsGraph({ taps }: { taps: Tap[] }) {
     const tapsCoalescedByDay = taps.reduce(

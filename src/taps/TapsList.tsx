@@ -1,7 +1,7 @@
-import { FlatList, View } from 'react-native';
 import { useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 import { Tap } from '@/taps/Tap';
-import { Text } from 'react-native-paper';
 
 export default function TapsList({ taps, refreshTaps }: { taps: Tap[]; refreshTaps: () => Promise<void> }) {
     const [refreshing, setRefreshing] = useState(false);

@@ -1,8 +1,8 @@
-import { It } from '@/its/It';
-import { IconButton } from 'react-native-paper';
-import useItsRepository from '@/its/useItsRepository';
 import { useContext } from 'react';
+import { IconButton } from 'react-native-paper';
+import { It } from '@/its/It';
 import { ItsContext } from '@/its/ItsContext';
+import useItsRepository from '@/its/useItsRepository';
 
 export default function RestoreItButton({ it }: { it: It }) {
     const itsRepository = useItsRepository();

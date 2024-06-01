@@ -6,7 +6,6 @@ import Animated, {
     withRepeat,
     withSequence,
 } from 'react-native-reanimated';
-
 import { ThemedText } from '@/components/ThemedText';
 
 export function HelloWave() {

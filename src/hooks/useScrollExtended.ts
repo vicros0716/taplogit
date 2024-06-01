@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView';
+import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 
 export default function useScrollExtended() {
     const [isExtended, setExtended] = useState(true);

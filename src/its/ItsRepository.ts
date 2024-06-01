@@ -1,6 +1,6 @@
+import dayjs from 'dayjs';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { It } from '@/its/It';
-import dayjs from 'dayjs';
 
 type DbIt = {
     id: number;

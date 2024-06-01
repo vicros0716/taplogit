@@ -1,14 +1,14 @@
-import { Stack } from 'expo-router';
-import { registerWidgetConfigurationScreen, registerWidgetTaskHandler } from 'react-native-android-widget';
-import { PaperProvider } from 'react-native-paper';
-import { SQLiteProvider } from 'expo-sqlite';
-import ItsContextProvider from '@/its/ItsContextProvider';
 import dayjs from 'dayjs';
 import UTC from 'dayjs/plugin/utc';
-import { initializeDb } from '@/db/initializeDb';
-import { widgetTaskHandler } from '@/widgetTaskHandler';
-import { WidgetConfigurationScreen } from '@/WidgetConfigurationScreen';
+import { Stack } from 'expo-router';
+import { SQLiteProvider } from 'expo-sqlite';
 import { LogBox } from 'react-native';
+import { registerWidgetConfigurationScreen, registerWidgetTaskHandler } from 'react-native-android-widget';
+import { PaperProvider } from 'react-native-paper';
+import { WidgetConfigurationScreen } from '@/WidgetConfigurationScreen';
+import { initializeDb } from '@/db/initializeDb';
+import ItsContextProvider from '@/its/ItsContextProvider';
+import { widgetTaskHandler } from '@/widgetTaskHandler';
 
 // See https://day.js.org/docs/en/plugin/utc
 dayjs.extend(UTC);

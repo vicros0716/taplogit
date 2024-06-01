@@ -1,10 +1,10 @@
+import { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator } from 'react-native-paper';
 import { It } from '@/its/It';
+import { Tap } from '@/taps/Tap';
 import TapsGraph from '@/taps/TapsGraph';
 import TapsList from '@/taps/TapsList';
-import { useCallback, useEffect, useState } from 'react';
-import { Tap } from '@/taps/Tap';
 import useTapsRepository from '@/taps/useTapsRepository';
-import { ActivityIndicator } from 'react-native-paper';
 
 export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It }) {
     const [taps, setTaps] = useState<Tap[]>([]);

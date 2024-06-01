@@ -1,7 +1,7 @@
-import type { WidgetTaskHandlerProps } from 'react-native-android-widget';
 import * as SQLite from 'expo-sqlite';
-import ItWidget from '@/its/ItWidget';
+import type { WidgetTaskHandlerProps } from 'react-native-android-widget';
 import { It } from '@/its/It';
+import ItWidget from '@/its/ItWidget';
 import { TapsRepository } from '@/taps/TapsRepository';
 
 const nameToWidget = {

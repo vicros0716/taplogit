@@ -1,13 +1,13 @@
-import { WidgetConfigurationScreenProps } from 'react-native-android-widget';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { Button, PaperProvider, Text } from 'react-native-paper';
-import ItWidget from '@/its/ItWidget';
-import { useContext, useEffect } from 'react';
-import { It } from '@/its/It';
-import { initializeDb } from '@/db/initializeDb';
-import ItsContextProvider from '@/its/ItsContextProvider';
 import { SQLiteProvider } from 'expo-sqlite';
+import { useContext, useEffect } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { WidgetConfigurationScreenProps } from 'react-native-android-widget';
+import { Button, PaperProvider, Text } from 'react-native-paper';
+import { initializeDb } from '@/db/initializeDb';
+import { It } from '@/its/It';
+import ItWidget from '@/its/ItWidget';
 import { ItsContext } from '@/its/ItsContext';
+import ItsContextProvider from '@/its/ItsContextProvider';
 
 export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps) {
     return (

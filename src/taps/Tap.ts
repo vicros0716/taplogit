@@ -1,5 +1,5 @@
-import { It } from '@/its/It';
 import { Dayjs } from 'dayjs';
+import { It } from '@/its/It';
 
 export type Tap = {
     id: number;

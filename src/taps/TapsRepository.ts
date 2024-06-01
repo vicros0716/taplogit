@@ -1,7 +1,7 @@
-import { SQLiteDatabase } from 'expo-sqlite';
-import { Tap } from '@/taps/Tap';
-import { It } from '@/its/It';
 import dayjs from 'dayjs';
+import { SQLiteDatabase } from 'expo-sqlite';
+import { It } from '@/its/It';
+import { Tap } from '@/taps/Tap';
 
 export class TapsRepository {
     private db: SQLiteDatabase;

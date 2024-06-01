@@ -1,10 +1,10 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
 import { useContext, useState } from 'react';
-import { ItsContext } from '@/its/ItsContext';
-import { assertedNonNull } from '@/util/assert';
+import { StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
+import { ItsContext } from '@/its/ItsContext';
 import TapsPage from '@/taps/TapsPage';
+import { assertedNonNull } from '@/util/assert';
 
 export default function ItDetailsScreen() {
     const [showChart, setShowChart] = useState(true);

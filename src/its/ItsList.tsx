@@ -1,15 +1,15 @@
-import { FlatList, StyleSheet, View } from 'react-native';
-import { useContext, useEffect, useState } from 'react';
-import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
-import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView';
-import { useSQLiteContext } from 'expo-sqlite';
-import { It } from '@/its/It';
-import { TapsRepository } from '@/taps/TapsRepository';
 import { Link } from 'expo-router';
+import { useSQLiteContext } from 'expo-sqlite';
+import { useContext, useEffect, useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { Button, Portal, Snackbar, Text } from 'react-native-paper';
+import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView';
+import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import DeleteItButton from '@/its/DeleteItButton';
-import RestoreItButton from '@/its/RestoreItButton';
+import { It } from '@/its/It';
 import { ItsContext } from '@/its/ItsContext';
+import RestoreItButton from '@/its/RestoreItButton';
+import { TapsRepository } from '@/taps/TapsRepository';
 
 export default function ItsList({ onScroll }: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void }) {
     const { its, refreshIts, showDeleted } = useContext(ItsContext);

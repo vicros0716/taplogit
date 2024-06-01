@@ -1,9 +1,9 @@
-import { Button, Dialog, IconButton, Portal, Text } from 'react-native-paper';
 import { useContext, useState } from 'react';
-import { It } from '@/its/It';
-import useItsRepository from '@/its/useItsRepository';
+import { Button, Dialog, IconButton, Portal, Text } from 'react-native-paper';
 import { getSQLiteErrorCode } from '@/db/getSQLiteErrorCode';
+import { It } from '@/its/It';
 import { ItsContext } from '@/its/ItsContext';
+import useItsRepository from '@/its/useItsRepository';
 
 export default function DeleteItButton({ it }: { it: It }) {
     const itsRepository = useItsRepository();
