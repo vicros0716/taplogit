@@ -8,6 +8,7 @@ import { It } from '@/its/It';
 import ItWidget from '@/its/ItWidget';
 import { ItsContext } from '@/its/ItsContext';
 import ItsContextProvider from '@/its/ItsContextProvider';
+import useItsRepository from '@/its/useItsRepository';
 
 export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps) {
     return (
@@ -23,6 +24,7 @@ export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps)
 
 function ProvidedWidgetConfigurationScreen({ widgetInfo, setResult, renderWidget }: WidgetConfigurationScreenProps) {
     const { its, refreshIts } = useContext(ItsContext);
+    const itsRepository = useItsRepository();
 
     useEffect(() => {
         refreshIts();
@@ -38,8 +40,9 @@ function ProvidedWidgetConfigurationScreen({ widgetInfo, setResult, renderWidget
                 renderItem={({ item }) => (
                     <WidgetConfigurationScreenListItem
                         it={item}
-                        onPress={() => {
+                        onPress={async () => {
                             renderWidget(<ItWidget it={item} />);
+                            await itsRepository.associateWidget(item.id, widgetInfo.widgetId);
                             setResult('ok');
                         }}
                     />

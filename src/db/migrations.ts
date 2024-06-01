@@ -5,7 +5,7 @@ const MIGRATIONS: string[] = [
     `
         CREATE TABLE its
         (
-            id          INTEGER PRIMARY KEY NOT NULL,
+            it_id       INTEGER PRIMARY KEY NOT NULL,
             created_at  INTEGER             NOT NULL DEFAULT (unixepoch()),
             deleted_at  INTEGER,
             name        TEXT                NOT NULL,
@@ -13,11 +13,17 @@ const MIGRATIONS: string[] = [
         );
         CREATE TABLE taps
         (
-            id        INTEGER PRIMARY KEY NOT NULL,
-            its_id    INTEGER             NOT NULL REFERENCES its,
+            tap_id    INTEGER PRIMARY KEY NOT NULL,
+            it_id     INTEGER             NOT NULL REFERENCES its,
             tapped_at INTEGER             NOT NULL DEFAULT (unixepoch())
         );
-        CREATE INDEX taps_its_index ON taps (its_id);
+        CREATE INDEX taps_its_index ON taps (it_id);
+        CREATE TABLE it_widgets
+        (
+            widget_id INTEGER PRIMARY KEY NOT NULL,
+            it_id     INTEGER             NOT NULL REFERENCES its
+        );
+        CREATE INDEX it_widgets_its_index ON it_widgets (it_id);
     `,
 ];
 

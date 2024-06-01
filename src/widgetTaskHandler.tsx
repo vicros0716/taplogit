@@ -2,42 +2,38 @@ import * as SQLite from 'expo-sqlite';
 import type { WidgetTaskHandlerProps } from 'react-native-android-widget';
 import { It } from '@/its/It';
 import ItWidget from '@/its/ItWidget';
+import { ItsRepository } from '@/its/ItsRepository';
 import { TapsRepository } from '@/taps/TapsRepository';
 
-const nameToWidget = {
-    It: ItWidget,
-};
-
 export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
-    const widgetInfo = props.widgetInfo;
-    const Widget = nameToWidget[widgetInfo.widgetName as keyof typeof nameToWidget];
+    const db = await SQLite.openDatabaseAsync('taplogit.db');
+    const itsRepository = new ItsRepository(db);
+
+    const widgetId = props.widgetInfo.widgetId;
+    const it: It = (await itsRepository.getItByWidgetId(widgetId)) ?? {
+        id: 0,
+        name: 'unconfigured widget',
+        isDeleted: false,
+        coalesceBy: 'day',
+    };
 
     switch (props.widgetAction) {
         case 'WIDGET_ADDED':
-            props.renderWidget(<Widget {...widgetInfo} it={{ id: 1, name: 'test It', isDeleted: false }} />);
-            break;
-
         case 'WIDGET_UPDATE':
-            props.renderWidget(<ItWidget it={{ id: 1, name: 'widget updated', isDeleted: false }} />);
-            // Not needed for now
-            break;
-
         case 'WIDGET_RESIZED':
-            props.renderWidget(<ItWidget it={{ id: 1, name: 'widget updated', isDeleted: false }} />);
-            // Not needed for now
+            props.renderWidget(<ItWidget it={it} />);
             break;
 
         case 'WIDGET_DELETED':
-            // Not needed for now
+            await itsRepository.forgetWidget(widgetId);
             break;
 
         case 'WIDGET_CLICK':
-            const db = await SQLite.openDatabaseAsync('taplogit.db');
-            const tapsRepository = new TapsRepository(db);
-            await tapsRepository.createTap(props.clickActionData?.it as It);
-            break;
-
-        default:
-            break;
+            switch (props.clickAction) {
+                case 'TAP':
+                    const tapsRepository = new TapsRepository(db);
+                    await tapsRepository.createTap(it);
+                    break;
+            }
     }
 }
