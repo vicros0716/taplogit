@@ -3,26 +3,22 @@ import { SQLiteDatabase } from 'expo-sqlite';
 const MIGRATIONS: string[] = [
     `PRAGMA journal_mode = 'wal';`,
     `
-      CREATE TABLE its
-      (
-          id         INTEGER PRIMARY KEY NOT NULL,
-          created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-          deleted_at TEXT,
-          name       TEXT                NOT NULL
-      );
-      CREATE TABLE taps
-      (
-          id         INTEGER PRIMARY KEY NOT NULL,
-          created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-          its_id     INTEGER             NOT NULL REFERENCES its,
-          tapped_at  TEXT                NOT NULL
-      );
-      CREATE INDEX taps_its_index ON taps (its_id);
-  `,
-    `
-      ALTER TABLE its
-          ADD COLUMN coalesce_by TEXT NOT NULL DEFAULT 'day'
-  `,
+        CREATE TABLE its
+        (
+            id          INTEGER PRIMARY KEY NOT NULL,
+            created_at  INTEGER             NOT NULL DEFAULT (unixepoch()),
+            deleted_at  INTEGER,
+            name        TEXT                NOT NULL,
+            coalesce_by TEXT                NOT NULL DEFAULT 'day'
+        );
+        CREATE TABLE taps
+        (
+            id        INTEGER PRIMARY KEY NOT NULL,
+            its_id    INTEGER             NOT NULL REFERENCES its,
+            tapped_at INTEGER             NOT NULL DEFAULT (unixepoch())
+        );
+        CREATE INDEX taps_its_index ON taps (its_id);
+    `,
 ];
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {

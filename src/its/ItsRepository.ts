@@ -4,8 +4,8 @@ import { It } from '@/its/It';
 
 type DbIt = {
     id: number;
-    created_at: string;
-    deleted_at: string | null;
+    created_at: number;
+    deleted_at: number | null;
     name: string;
     coalesce_by: string;
 };
@@ -49,7 +49,7 @@ export class ItsRepository {
 
     async deleteIt(id: number) {
         console.debug(`Deleting it; id: ${id}`);
-        const deletedAt = dayjs.utc().toISOString();
+        const deletedAt = dayjs().unix();
         const result = await this.db.runAsync('UPDATE its SET deleted_at = ? WHERE id = ?', deletedAt, id);
         console.debug(`Deleted it; id: ${id}, deleted_at: ${deletedAt}`);
         return result;
