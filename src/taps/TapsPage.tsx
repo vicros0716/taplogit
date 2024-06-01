@@ -51,7 +51,7 @@ export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It 
             {mode === 'chart' ? (
                 <TapsGraph taps={taps} coalesceBy={coalesceBy} />
             ) : mode === 'list' ? (
-                <TapsList taps={taps} refreshTaps={refreshTaps} />
+                <TapsList taps={taps} refreshTaps={refreshTaps} coalesceBy={coalesceBy} />
             ) : null}
         </View>
     );

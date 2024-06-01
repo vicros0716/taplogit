@@ -6,10 +6,10 @@ import { Tap } from '@/taps/Tap';
 export default function TapsGraph({ taps, coalesceBy }: { taps: Tap[]; coalesceBy: OpUnitType }) {
     const coalescedTaps = taps.reduce(
         (acc, tap) => {
-            const tappedAtUnixTimestamp = tap.tappedAt.startOf(coalesceBy).toISOString();
+            const tappedAtISOString = tap.tappedAt.startOf(coalesceBy).toISOString();
             return {
                 ...acc,
-                [tappedAtUnixTimestamp]: (acc[tappedAtUnixTimestamp] ?? 0) + 1,
+                [tappedAtISOString]: (acc[tappedAtISOString] ?? 0) + 1,
             };
         },
         {} as { [key: string]: number },
