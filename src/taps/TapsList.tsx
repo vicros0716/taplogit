@@ -1,28 +1,10 @@
 import { FlatList, View } from 'react-native';
-import { useCallback, useEffect, useState } from 'react';
-import { It } from '@/its/It';
+import { useState } from 'react';
 import { Tap } from '@/taps/Tap';
 import { Text } from 'react-native-paper';
-import useTapsRepository from '@/taps/useTapsRepository';
 
-export default function TapsList({ it }: { it: It }) {
-    const [taps, setTaps] = useState<Tap[]>([]);
-
-    const tapsRepository = useTapsRepository();
+export default function TapsList({ taps, refreshTaps }: { taps: Tap[]; refreshTaps: () => Promise<void> }) {
     const [refreshing, setRefreshing] = useState(false);
-    const refreshTaps = useCallback(async () => {
-        setTaps(await tapsRepository.getTaps(it));
-    }, [it]);
-
-    useEffect(() => {
-        async function setup() {
-            setRefreshing(true);
-            await refreshTaps();
-            setRefreshing(false);
-        }
-
-        setup();
-    }, []);
 
     return (
         <FlatList

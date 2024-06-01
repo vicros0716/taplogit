@@ -8,10 +8,17 @@ import UTC from 'dayjs/plugin/utc';
 import { initializeDb } from '@/db/initializeDb';
 import { widgetTaskHandler } from '@/widgetTaskHandler';
 import { WidgetConfigurationScreen } from '@/WidgetConfigurationScreen';
+import { LogBox } from 'react-native';
 
+// See https://day.js.org/docs/en/plugin/utc
 dayjs.extend(UTC);
 
+// See https://commerce.nearform.com/open-source/victory/docs/react-native#ignoring-require-cycles
+LogBox.ignoreLogs(['Require cycle: node_modules/victory']);
+
+// See https://saleksovski.github.io/react-native-android-widget/docs/tutorial/register-task-handler
 registerWidgetTaskHandler(widgetTaskHandler);
+// See https://saleksovski.github.io/react-native-android-widget/docs/tutorial/make-widget-configurable
 registerWidgetConfigurationScreen(WidgetConfigurationScreen);
 
 export default function RootLayout() {
