@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import { useContext } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { Switch, Text } from 'react-native-paper';
+import { Switch, Text, useTheme } from 'react-native-paper';
 import useScrollExtended from '@/hooks/useScrollExtended';
 import CreateItFAB from '@/its/CreateItFAB';
 import { ItsContext } from '@/its/ItsContext';
@@ -10,6 +10,7 @@ import ItsList from '@/its/ItsList';
 export default function HomeScreen() {
     const [isExtended, onScroll] = useScrollExtended();
     const { showDeleted, setShowDeleted } = useContext(ItsContext);
+    const theme = useTheme();
     return (
         <SafeAreaView style={styles.container}>
             <Stack.Screen
@@ -17,7 +18,7 @@ export default function HomeScreen() {
                     title: 'Tap Log It',
                     headerRight: () => (
                         <>
-                            <Text style={{ color: 'white' }}>Show Deleted</Text>
+                            <Text style={{ color: theme.colors.onPrimary }}>Show Deleted</Text>
                             <Switch value={showDeleted} onValueChange={setShowDeleted} />
                         </>
                     ),

@@ -3,8 +3,6 @@ import { useState } from 'react';
 import { SectionList, StyleSheet, View } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { IconButton, Text } from 'react-native-paper';
-import DeleteItButton from '@/its/DeleteItButton';
-import RestoreItButton from '@/its/RestoreItButton';
 import { Tap } from '@/taps/Tap';
 import useTapsRepository from '@/taps/useTapsRepository';
 

@@ -1,13 +1,15 @@
 import { Stack } from 'expo-router';
+import { useTheme } from 'react-native-paper';
 
 export default function HomeLayout() {
+    const theme = useTheme();
     return (
         <Stack
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: '#f4511e',
+                    backgroundColor: theme.colors.primary,
                 },
-                headerTintColor: '#fff',
+                headerTintColor: theme.colors.onPrimary,
                 headerTitleStyle: {
                     fontWeight: 'bold',
                 },

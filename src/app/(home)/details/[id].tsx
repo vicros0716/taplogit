@@ -1,7 +1,7 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useContext, useState } from 'react';
 import { View } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { IconButton, useTheme } from 'react-native-paper';
 import { ItsContext } from '@/its/ItsContext';
 import TapsPage from '@/taps/TapsPage';
 import { assertedNonNull } from '@/util/assert';
@@ -11,6 +11,7 @@ export default function ItDetailsScreen() {
     const { id } = useLocalSearchParams();
     const { its } = useContext(ItsContext);
     const it = assertedNonNull(its.find((it) => it.id.toString() === id));
+    const theme = useTheme();
 
     return (
         <View>
@@ -19,8 +20,8 @@ export default function ItDetailsScreen() {
                     title: it.name,
                     headerRight: () => (
                         <IconButton
+                            iconColor={theme.colors.onPrimary}
                             icon={showChart ? 'view-list' : 'chart-line'}
-                            iconColor="white"
                             onPress={() => setShowChart(!showChart)}
                         />
                     ),

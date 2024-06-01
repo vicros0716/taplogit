@@ -1,9 +1,11 @@
 import dayjs, { OpUnitType } from 'dayjs';
 import { View } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import { VictoryBar, VictoryChart, VictoryLabel, VictoryTheme } from 'victory-native';
 import { Tap } from '@/taps/Tap';
 
 export default function TapsGraph({ taps, coalesceBy }: { taps: Tap[]; coalesceBy: OpUnitType }) {
+    const theme = useTheme();
     const coalescedTaps = taps.reduce(
         (acc, tap) => {
             const tappedAtISOString = tap.tappedAt.startOf(coalesceBy).toISOString();
@@ -20,13 +22,37 @@ export default function TapsGraph({ taps, coalesceBy }: { taps: Tap[]; coalesceB
     }));
     return (
         <View>
-            <VictoryChart scale={{ x: 'time' }} domainPadding={{ x: 24 }} theme={VictoryTheme.material}>
+            <VictoryChart
+                scale={{ x: 'time' }}
+                domainPadding={{ x: 24 }}
+                theme={{
+                    ...VictoryTheme.material,
+                    axis: {
+                        ...VictoryTheme.material.axis,
+                        style: {
+                            ...VictoryTheme.material.axis?.style,
+                            axis: {
+                                ...VictoryTheme.material.axis?.style?.axis,
+                                stroke: theme.colors.outline,
+                                strokeWidth: 1,
+                            },
+                            axisLabel: {
+                                ...VictoryTheme.material.axis?.style?.axisLabel,
+                                stroke: theme.colors.outline,
+                                color: theme.colors.outline,
+                            },
+                        },
+                    },
+                }}>
                 <VictoryBar
                     data={data}
                     x="tappedAt"
                     y="count"
-                    style={{ labels: { fill: 'white' } }}
-                    labelComponent={<VictoryLabel dy={30} />}
+                    style={{
+                        data: {
+                            fill: theme.colors.secondaryContainer,
+                        },
+                    }}
                 />
             </VictoryChart>
         </View>

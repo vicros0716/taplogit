@@ -3,7 +3,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
-import { Button, Portal, Snackbar, Text } from 'react-native-paper';
+import { Button, IconButton, Portal, Snackbar, Text, useTheme } from 'react-native-paper';
 import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import DeleteItButton from '@/its/DeleteItButton';
@@ -24,6 +24,7 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
 
         setup();
     }, [showDeleted]);
+    const theme = useTheme();
 
     return (
         <FlatList
@@ -45,6 +46,7 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
                 await refreshIts();
                 setRefreshing(false);
             }}
+            style={{ backgroundColor: theme.colors.surface }}
         />
     );
 }
@@ -53,20 +55,23 @@ function ItsListItem({ it }: { it: It }) {
     const db = useSQLiteContext();
     const tapsRepository = new TapsRepository(db);
     const [isSnackbarVisible, setSnackbarVisible] = useState(false);
+    const theme = useTheme();
 
     return (
         <View style={styles.container}>
             <Link href={`/details/${it.id}`} style={{ flexGrow: 1 }}>
-                <Text variant="titleLarge">{it.name}</Text>
+                <Text variant="titleLarge" style={{ color: theme.colors.onSurface }}>
+                    {it.name}
+                </Text>
             </Link>
-            <Button
-                mode="contained"
+            <IconButton
+                icon="gesture-tap"
+                iconColor={theme.colors.onSurface}
                 onPress={async () => {
                     await tapsRepository.createTap(it);
                     setSnackbarVisible(true);
-                }}>
-                Tap
-            </Button>
+                }}
+            />
             <Portal>
                 <Snackbar visible={isSnackbarVisible} onDismiss={() => setSnackbarVisible(false)} duration={500}>
                     <Text style={{ color: 'white' }}>{it.name} was tapped!</Text>
