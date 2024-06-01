@@ -1,7 +1,7 @@
 import { Link } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useContext, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, TouchableHighlight, View } from 'react-native';
 import { Button, Portal, Snackbar, Text } from 'react-native-paper';
 import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
@@ -77,6 +77,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 48,
         padding: 4,
+        paddingLeft: 12,
+        paddingRight: 12,
     },
     actionsContainer: {
         flexDirection: 'row',
