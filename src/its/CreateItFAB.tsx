@@ -36,13 +36,13 @@ function CreateItDialog({ visible, onDismiss }: { visible: boolean; onDismiss: (
                 <Button onPress={onDismiss}>Cancel</Button>
                 <Button
                     onPress={async () => {
-                        await itsRepository.createIt(name);
+                        await itsRepository.createIt(name.trim());
                         await refreshIts();
                         onDismiss();
                         setName('');
                     }}
                     mode="contained"
-                    disabled={name === ''}>
+                    disabled={name.trim() === ''}>
                     Create
                 </Button>
             </Dialog.Actions>
