@@ -1,7 +1,10 @@
 import dayjs, { OpUnitType } from 'dayjs';
 import { useState } from 'react';
 import { SectionList, StyleSheet, View } from 'react-native';
+import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { IconButton, Text } from 'react-native-paper';
+import DeleteItButton from '@/its/DeleteItButton';
+import RestoreItButton from '@/its/RestoreItButton';
 import { Tap } from '@/taps/Tap';
 import useTapsRepository from '@/taps/useTapsRepository';
 
@@ -47,15 +50,25 @@ export default function TapsList({
         <SectionList
             sections={data}
             renderItem={({ item }) => (
-                <TapsListItem
-                    tap={item}
-                    deleteTap={async () => {
-                        setRefreshing(true);
-                        await tapsRepository.deleteTap(item.id);
-                        await refreshTaps();
-                        setRefreshing(false);
-                    }}
-                />
+                <Swipeable
+                    overshootLeft={false}
+                    overshootRight={false}
+                    renderRightActions={() => (
+                        <RectButton style={{ backgroundColor: '#AB3717' }}>
+                            <IconButton
+                                icon="delete"
+                                iconColor="white"
+                                onPress={async () => {
+                                    setRefreshing(true);
+                                    await tapsRepository.deleteTap(item.id);
+                                    await refreshTaps();
+                                    setRefreshing(false);
+                                }}
+                            />
+                        </RectButton>
+                    )}>
+                    <TapsListItem tap={item} />
+                </Swipeable>
             )}
             renderSectionHeader={({ section: { title } }) => <TapsListSectionHeader title={title} />}
             refreshing={refreshing}
@@ -76,11 +89,10 @@ function TapsListSectionHeader({ title }: { title: string }) {
     );
 }
 
-function TapsListItem({ tap, deleteTap }: { tap: Tap; deleteTap: () => Promise<void> }) {
+function TapsListItem({ tap }: { tap: Tap }) {
     return (
         <View style={styles.itemContainer}>
             <Text variant="bodyMedium">{tap.tappedAt.format('MMM D, YYYY @ hh:mm A')}</Text>
-            <IconButton icon="delete" onPress={deleteTap} />
         </View>
     );
 }
@@ -91,7 +103,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: 40,
+        height: 48,
         padding: 4,
         paddingLeft: 36,
     },

@@ -1,7 +1,8 @@
 import { Link } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useContext, useEffect, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, TouchableHighlight, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
 import { Button, Portal, Snackbar, Text } from 'react-native-paper';
 import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
@@ -27,7 +28,16 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
     return (
         <FlatList
             data={its}
-            renderItem={({ item }) => <ItsListItem it={item} />}
+            renderItem={({ item }) => (
+                <Swipeable
+                    overshootLeft={false}
+                    overshootRight={false}
+                    renderRightActions={() =>
+                        item.isDeleted ? <RestoreItButton it={item} /> : <DeleteItButton it={item} />
+                    }>
+                    <ItsListItem it={item} />
+                </Swipeable>
+            )}
             onScroll={onScroll}
             refreshing={refreshing}
             onRefresh={async () => {
@@ -49,22 +59,19 @@ function ItsListItem({ it }: { it: It }) {
             <Link href={`/details/${it.id}`} style={{ flexGrow: 1 }}>
                 <Text variant="titleLarge">{it.name}</Text>
             </Link>
-            <View style={styles.actionsContainer}>
-                {it.isDeleted ? <RestoreItButton it={it} /> : <DeleteItButton it={it} />}
-                <Button
-                    mode="contained"
-                    onPress={async () => {
-                        await tapsRepository.createTap(it);
-                        setSnackbarVisible(true);
-                    }}>
-                    Tap
-                </Button>
-                <Portal>
-                    <Snackbar visible={isSnackbarVisible} onDismiss={() => setSnackbarVisible(false)} duration={500}>
-                        <Text style={{ color: 'white' }}>{it.name} was tapped!</Text>
-                    </Snackbar>
-                </Portal>
-            </View>
+            <Button
+                mode="contained"
+                onPress={async () => {
+                    await tapsRepository.createTap(it);
+                    setSnackbarVisible(true);
+                }}>
+                Tap
+            </Button>
+            <Portal>
+                <Snackbar visible={isSnackbarVisible} onDismiss={() => setSnackbarVisible(false)} duration={500}>
+                    <Text style={{ color: 'white' }}>{it.name} was tapped!</Text>
+                </Snackbar>
+            </Portal>
         </View>
     );
 }
@@ -79,10 +86,5 @@ const styles = StyleSheet.create({
         padding: 4,
         paddingLeft: 12,
         paddingRight: 12,
-    },
-    actionsContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: 40,
     },
 });

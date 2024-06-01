@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { RectButton } from 'react-native-gesture-handler';
 import { IconButton } from 'react-native-paper';
 import { It } from '@/its/It';
 import { ItsContext } from '@/its/ItsContext';
@@ -10,12 +11,15 @@ export default function RestoreItButton({ it }: { it: It }) {
 
     // TODO(polish): Set a loading indicator after pressing Restore
     return (
-        <IconButton
-            icon="delete-restore"
-            onPress={async () => {
-                await itsRepository.restoreIt(it.id);
-                await refreshIts();
-            }}
-        />
+        <RectButton style={{ backgroundColor: '#136F63' }}>
+            <IconButton
+                icon="delete-restore"
+                iconColor="white"
+                onPress={async () => {
+                    await itsRepository.restoreIt(it.id);
+                    await refreshIts();
+                }}
+            />
+        </RectButton>
     );
 }

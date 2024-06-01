@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { RectButton } from 'react-native-gesture-handler';
 import { Button, Dialog, IconButton, Portal, Text } from 'react-native-paper';
 import { getSQLiteErrorCode } from '@/db/getSQLiteErrorCode';
 import { It } from '@/its/It';
@@ -16,8 +17,8 @@ export default function DeleteItButton({ it }: { it: It }) {
     };
     // TODO(polish): Set a loading indicator after pressing Delete
     return (
-        <>
-            <IconButton icon="delete" onPress={() => setVisible(true)} />
+        <RectButton style={{ backgroundColor: '#AB3717' }}>
+            <IconButton icon="delete" iconColor="white" onPress={() => setVisible(true)} />
             <Portal>
                 <Dialog visible={visible} onDismiss={dismiss}>
                     <Dialog.Content>
@@ -46,6 +47,6 @@ export default function DeleteItButton({ it }: { it: It }) {
                     </Dialog.Actions>
                 </Dialog>
             </Portal>
-        </>
+        </RectButton>
     );
 }

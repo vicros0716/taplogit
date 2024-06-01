@@ -58,8 +58,12 @@
   "private": true,
   "prettier": {
     "bracketSameLine": true,
-    "importOrder": ["^@/(.*)$"],
-    "plugins": ["@trivago/prettier-plugin-sort-imports"],
+    "importOrder": [
+      "^@/(.*)$"
+    ],
+    "plugins": [
+      "@trivago/prettier-plugin-sort-imports"
+    ],
     "printWidth": 120,
     "singleQuote": true,
     "tabWidth": 4
