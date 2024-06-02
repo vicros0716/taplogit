@@ -1,7 +1,7 @@
-import { Stack } from 'expo-router';
+import { Link, Stack } from 'expo-router';
 import { useContext } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { Switch, Text, useTheme } from 'react-native-paper';
+import { IconButton, Switch, Text, useTheme } from 'react-native-paper';
 import useScrollExtended from '@/hooks/useScrollExtended';
 import CreateItFAB from '@/its/CreateItFAB';
 import { ItsContext } from '@/its/ItsContext';
@@ -16,6 +16,11 @@ export default function HomeScreen() {
             <Stack.Screen
                 options={{
                     title: 'Tap Log It',
+                    headerLeft: () => (
+                        <Link href="/it-widget-preview">
+                            <IconButton icon="code-tags" />
+                        </Link>
+                    ),
                     headerRight: () => (
                         <>
                             <Text style={{ color: theme.colors.onPrimary }}>Show Deleted</Text>

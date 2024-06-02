@@ -10,6 +10,11 @@ type DbIt = {
     coalesce_by: string;
 };
 
+type DbItWidget = {
+    widget_id: number;
+    it_id: number;
+};
+
 export function isValidCoalesceBy(coalesceBy: string): coalesceBy is OpUnitType {
     return ['week', 'day', 'hour'].includes(coalesceBy);
 }
@@ -83,10 +88,17 @@ export class ItsRepository {
         return result === null ? null : convert(result);
     }
 
+    async getWidgetIdsByItId(itId: number) {
+        console.debug(`Getting widget ids associated with it ${itId}`);
+        const result = await this.db.getAllAsync<DbItWidget>('SELECT * FROM it_widgets WHERE it_id = ?', itId);
+        console.debug(`Got widget ids associated with it ${itId}`);
+        return result.map(({ widget_id }) => widget_id);
+    }
+
     async associateWidget(itId: number, widgetId: number) {
         console.debug(`Associating widget ${widgetId} with it ${itId}`);
         const result = await this.db.runAsync(
-            'INSERT INTO it_widgets (widget_id, it_id) VALUES (?, ?)',
+            'INSERT OR IGNORE INTO it_widgets (widget_id, it_id) VALUES (?, ?)',
             widgetId,
             itId,
         );

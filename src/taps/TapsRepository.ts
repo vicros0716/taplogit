@@ -18,13 +18,32 @@ export class TapsRepository {
 
     async getTaps(it: It): Promise<Tap[]> {
         console.debug(`Getting all taps for ${it.name}`);
-        const result = await this.db.getAllAsync<DbTap>('SELECT * FROM taps WHERE it_id = ?', it.id);
+        const result = await this.db.getAllAsync<DbTap>(
+            'SELECT * FROM taps WHERE it_id = ? ORDER BY tapped_at DESC',
+            it.id,
+        );
         console.debug(`Got all taps for ${it.name}`);
         return result.map(({ tap_id, tapped_at }) => ({
             id: tap_id,
             it,
             tappedAt: dayjs.unix(tapped_at),
         }));
+    }
+
+    async getLatestTap(it: It): Promise<Tap | null> {
+        console.debug(`Getting latest tap for ${it.name}`);
+        const result = await this.db.getFirstAsync<DbTap>(
+            'SELECT * FROM taps WHERE it_id = ? ORDER BY tapped_at DESC LIMIT 1',
+            it.id,
+        );
+        console.debug(`Got latest tap for ${it.name}`);
+        return result === null
+            ? null
+            : {
+                  id: result.tap_id,
+                  it,
+                  tappedAt: dayjs.unix(result.tapped_at),
+              };
     }
 
     async createTap(it: It) {

@@ -9,6 +9,7 @@ import ItWidget from '@/its/ItWidget';
 import { ItsContext } from '@/its/ItsContext';
 import ItsContextProvider from '@/its/ItsContextProvider';
 import useItsRepository from '@/its/useItsRepository';
+import useTapsRepository from '@/taps/useTapsRepository';
 
 export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps) {
     return (
@@ -24,7 +25,6 @@ export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps)
 
 function ProvidedWidgetConfigurationScreen({ widgetInfo, setResult, renderWidget }: WidgetConfigurationScreenProps) {
     const { its, refreshIts } = useContext(ItsContext);
-    const itsRepository = useItsRepository();
 
     useEffect(() => {
         refreshIts();
@@ -40,9 +40,9 @@ function ProvidedWidgetConfigurationScreen({ widgetInfo, setResult, renderWidget
                 renderItem={({ item }) => (
                     <WidgetConfigurationScreenListItem
                         it={item}
-                        onPress={async () => {
-                            renderWidget(<ItWidget it={item} />);
-                            await itsRepository.associateWidget(item.id, widgetInfo.widgetId);
+                        widgetId={widgetInfo.widgetId}
+                        onPress={async (widget: JSX.Element) => {
+                            renderWidget(widget);
                             setResult('ok');
                         }}
                     />
@@ -54,9 +54,25 @@ function ProvidedWidgetConfigurationScreen({ widgetInfo, setResult, renderWidget
     );
 }
 
-function WidgetConfigurationScreenListItem({ it, onPress }: { it: It; onPress: () => void }) {
+function WidgetConfigurationScreenListItem({
+    it,
+    widgetId,
+    onPress,
+}: {
+    it: It;
+    widgetId: number;
+    onPress: (widget: JSX.Element) => void;
+}) {
+    const itsRepository = useItsRepository();
+    const tapsRepository = useTapsRepository();
     return (
-        <Button mode="contained" onPress={onPress}>
+        <Button
+            mode="contained"
+            onPress={async () => {
+                await itsRepository.associateWidget(it.id, widgetId);
+                const latestTap = await tapsRepository.getLatestTap(it);
+                onPress(<ItWidget it={it} latestTap={latestTap} />);
+            }}>
             {it.name}
         </Button>
     );

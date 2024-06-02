@@ -1,8 +1,10 @@
 import { OpUnitType } from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { requestWidgetUpdateById } from 'react-native-android-widget';
 import { ActivityIndicator, SegmentedButtons } from 'react-native-paper';
 import { It } from '@/its/It';
+import ItWidget from '@/its/ItWidget';
 import { isValidCoalesceBy } from '@/its/ItsRepository';
 import useItsRepository from '@/its/useItsRepository';
 import { Tap } from '@/taps/Tap';
@@ -17,7 +19,19 @@ export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It 
     const tapsRepository = useTapsRepository();
     const [refreshing, setRefreshing] = useState(false);
     const refreshTaps = useCallback(async () => {
-        setTaps(await tapsRepository.getTaps(it));
+        const taps = await tapsRepository.getTaps(it);
+        setTaps(taps);
+        const latestTap = taps[0];
+        const widgetIds = await itsRepository.getWidgetIdsByItId(it.id);
+        await Promise.all(
+            widgetIds.map((widgetId) =>
+                requestWidgetUpdateById({
+                    widgetName: 'It',
+                    widgetId,
+                    renderWidget: () => <ItWidget it={it} latestTap={latestTap} />,
+                }),
+            ),
+        );
     }, [it]);
 
     useEffect(() => {

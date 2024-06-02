@@ -34,6 +34,7 @@ export default function RootLayout() {
                         <Stack>
                             <Stack.Screen name="(home)" options={{ headerShown: false }} />
                             <Stack.Screen name="+not-found" options={{ headerShown: false }} />
+                            <Stack.Screen name="it-widget-preview" options={{ title: 'It Widget Preview' }} />
                         </Stack>
                     </ItsContextProvider>
                 </GestureHandlerRootView>

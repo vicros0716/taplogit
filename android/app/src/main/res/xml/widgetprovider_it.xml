@@ -13,7 +13,7 @@
                     android:previewImage="@drawable/it_preview"
                     android:description="@string/widget_taplogit_description"
 
-                    android:resizeMode="none"
+                    android:resizeMode="horizontal|vertical"
 
                     android:configure="com.taplogit.widget.WidgetConfigurationActivity"
                     android:widgetFeatures="reconfigurable"

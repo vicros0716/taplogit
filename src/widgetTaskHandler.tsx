@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import type { WidgetTaskHandlerProps } from 'react-native-android-widget';
+import { requestWidgetUpdateById, WidgetTaskHandlerProps } from 'react-native-android-widget';
 import { It } from '@/its/It';
 import ItWidget from '@/its/ItWidget';
 import { ItsRepository } from '@/its/ItsRepository';
@@ -16,12 +16,14 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
         isDeleted: false,
         coalesceBy: 'day',
     };
+    const tapsRepository = new TapsRepository(db);
+    const latestTap = await tapsRepository.getLatestTap(it);
 
     switch (props.widgetAction) {
         case 'WIDGET_ADDED':
         case 'WIDGET_UPDATE':
         case 'WIDGET_RESIZED':
-            props.renderWidget(<ItWidget it={it} />);
+            props.renderWidget(<ItWidget it={it} latestTap={latestTap} />);
             break;
 
         case 'WIDGET_DELETED':
@@ -33,6 +35,20 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
                 case 'TAP':
                     const tapsRepository = new TapsRepository(db);
                     await tapsRepository.createTap(it);
+                    const latestTap = await tapsRepository.getLatestTap(it);
+                    const widgetIds = await itsRepository.getWidgetIdsByItId(it.id);
+                    await Promise.all(
+                        widgetIds.map((widgetId) => {
+                            console.log(
+                                `requesting update for widget ${widgetId}, should set latest tap to ${latestTap?.tappedAt.format('MMM D, YYYY @ hh:mm A')}`,
+                            );
+                            return requestWidgetUpdateById({
+                                widgetName: 'It',
+                                widgetId,
+                                renderWidget: () => <ItWidget it={it} latestTap={latestTap} />,
+                            });
+                        }),
+                    );
                     break;
             }
     }
