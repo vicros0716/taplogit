@@ -6,12 +6,12 @@ import { LogBox, useColorScheme } from 'react-native';
 import { registerWidgetConfigurationScreen, registerWidgetTaskHandler } from 'react-native-android-widget';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from 'react-native-paper';
-import { WidgetConfigurationScreen } from '@/WidgetConfigurationScreen';
 import { darkTheme } from '@/constants/darkTheme';
 import { lightTheme } from '@/constants/lightTheme';
 import { initializeDb } from '@/db/initializeDb';
 import ItsContextProvider from '@/its/ItsContextProvider';
-import { widgetTaskHandler } from '@/widgetTaskHandler';
+import { WidgetConfigurationScreen } from '@/widgets/WidgetConfigurationScreen';
+import { widgetTaskHandler } from '@/widgets/widgetTaskHandler';
 
 // See https://day.js.org/docs/en/plugin/utc
 dayjs.extend(UTC);

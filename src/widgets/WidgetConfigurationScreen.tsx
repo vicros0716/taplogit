@@ -5,11 +5,11 @@ import { WidgetConfigurationScreenProps } from 'react-native-android-widget';
 import { Button, PaperProvider, Text } from 'react-native-paper';
 import { initializeDb } from '@/db/initializeDb';
 import { It } from '@/its/It';
-import ItWidget from '@/its/ItWidget';
 import { ItsContext } from '@/its/ItsContext';
 import ItsContextProvider from '@/its/ItsContextProvider';
 import useItsRepository from '@/its/useItsRepository';
 import useTapsRepository from '@/taps/useTapsRepository';
+import ItWidget from '@/widgets/ItWidget';
 
 export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps) {
     return (

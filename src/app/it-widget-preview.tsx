@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { WidgetPreview } from 'react-native-android-widget';
 import { It } from '@/its/It';
-import ItWidget from '@/its/ItWidget';
 import { Tap } from '@/taps/Tap';
+import ItWidget from '@/widgets/ItWidget';
 
 export default function ItWidgetPreview() {
     return (

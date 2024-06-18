@@ -9,11 +9,11 @@ import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import DeleteItButton from '@/its/DeleteItButton';
 import { It } from '@/its/It';
-import ItWidget from '@/its/ItWidget';
 import { ItsContext } from '@/its/ItsContext';
 import { ItsRepository } from '@/its/ItsRepository';
 import RestoreItButton from '@/its/RestoreItButton';
 import { TapsRepository } from '@/taps/TapsRepository';
+import ItWidget from '@/widgets/ItWidget';
 
 export default function ItsList({ onScroll }: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void }) {
     const { its, refreshIts, showDeleted } = useContext(ItsContext);

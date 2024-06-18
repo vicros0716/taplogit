@@ -4,13 +4,13 @@ import { StyleSheet, View } from 'react-native';
 import { requestWidgetUpdateById } from 'react-native-android-widget';
 import { ActivityIndicator, SegmentedButtons } from 'react-native-paper';
 import { It } from '@/its/It';
-import ItWidget from '@/its/ItWidget';
 import { isValidCoalesceBy } from '@/its/ItsRepository';
 import useItsRepository from '@/its/useItsRepository';
 import { Tap } from '@/taps/Tap';
 import TapsGraph from '@/taps/TapsGraph';
 import TapsList from '@/taps/TapsList';
 import useTapsRepository from '@/taps/useTapsRepository';
+import ItWidget from '@/widgets/ItWidget';
 
 export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It }) {
     const [taps, setTaps] = useState<Tap[]>([]);
