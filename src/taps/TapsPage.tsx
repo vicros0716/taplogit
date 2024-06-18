@@ -10,7 +10,7 @@ import { Tap } from '@/taps/Tap';
 import TapsGraph from '@/taps/TapsGraph';
 import TapsList from '@/taps/TapsList';
 import useTapsRepository from '@/taps/useTapsRepository';
-import ItWidget from '@/widgets/ItWidget';
+import TapWidgIt from '@/widgets/TapWidgIt';
 
 export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It }) {
     const [taps, setTaps] = useState<Tap[]>([]);
@@ -28,7 +28,7 @@ export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It 
                 requestWidgetUpdateById({
                     widgetName: 'It',
                     widgetId,
-                    renderWidget: () => <ItWidget it={it} latestTap={latestTap} />,
+                    renderWidget: () => <TapWidgIt it={it} latestTap={latestTap} />,
                 }),
             ),
         );

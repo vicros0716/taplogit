@@ -2,7 +2,7 @@ import { FlexWidget, TextWidget } from 'react-native-android-widget';
 import { It } from '@/its/It';
 import { Tap } from '@/taps/Tap';
 
-export default function ItWidget({ it, latestTap }: { it: It; latestTap: Tap | null }) {
+export default function TapWidgIt({ it, latestTap }: { it: It; latestTap: Tap | null }) {
     // TODO(feature): base the formatted text off the coalesce by choice.
     return (
         <FlexWidget style={styles.container} clickAction="TAP" clickActionData={{ it: it }}>

@@ -9,7 +9,7 @@ import { ItsContext } from '@/its/ItsContext';
 import ItsContextProvider from '@/its/ItsContextProvider';
 import useItsRepository from '@/its/useItsRepository';
 import useTapsRepository from '@/taps/useTapsRepository';
-import ItWidget from '@/widgets/ItWidget';
+import TapWidgIt from '@/widgets/TapWidgIt';
 
 export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps) {
     return (
@@ -71,7 +71,7 @@ function WidgetConfigurationScreenListItem({
             onPress={async () => {
                 await itsRepository.associateWidget(it.id, widgetId);
                 const latestTap = await tapsRepository.getLatestTap(it);
-                onPress(<ItWidget it={it} latestTap={latestTap} />);
+                onPress(<TapWidgIt it={it} latestTap={latestTap} />);
             }}>
             {it.name}
         </Button>

@@ -10,8 +10,8 @@
 
                     android:initialLayout="@layout/rn_widget"
 
-                    android:previewImage="@drawable/it_preview"
-                    android:description="@string/widget_taplogit_description"
+                    android:previewImage="@drawable/tapwidgit_preview"
+                    android:description="@string/widget_tapwidgit_description"
 
                     android:resizeMode="horizontal|vertical"
 

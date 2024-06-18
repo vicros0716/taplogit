@@ -32,16 +32,16 @@
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>
     <service android:name="com.reactnativeandroidwidget.RNWidgetCollectionService" android:permission="android.permission.BIND_REMOTEVIEWS" />
     <receiver
-        android:name=".widget.It"
+        android:name=".widget.TapWidgIt"
         android:exported="false"
-        android:label="taplogit">
+        android:label="Tap WidgIt">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
         <action android:name="com.taplogit.WIDGET_CLICK" />
       </intent-filter>
       <meta-data
           android:name="android.appwidget.provider"
-          android:resource="@xml/widgetprovider_it" />
+          android:resource="@xml/widgetprovider_tapwidgit" />
     </receiver>
     <activity android:name=".widget.WidgetConfigurationActivity" android:exported="true">
       <intent-filter>

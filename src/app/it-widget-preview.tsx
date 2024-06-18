@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 import { WidgetPreview } from 'react-native-android-widget';
 import { It } from '@/its/It';
 import { Tap } from '@/taps/Tap';
-import ItWidget from '@/widgets/ItWidget';
+import TapWidgIt from '@/widgets/TapWidgIt';
 
 export default function ItWidgetPreview() {
     return (
@@ -21,7 +21,7 @@ export default function ItWidgetPreview() {
                         it,
                         tappedAt: dayjs(),
                     };
-                    return <ItWidget it={it} latestTap={latestTap} />;
+                    return <TapWidgIt it={it} latestTap={latestTap} />;
                 }}
                 width={320}
                 height={200}

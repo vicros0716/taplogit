@@ -3,7 +3,7 @@ import { requestWidgetUpdateById, WidgetTaskHandlerProps } from 'react-native-an
 import { It } from '@/its/It';
 import { ItsRepository } from '@/its/ItsRepository';
 import { TapsRepository } from '@/taps/TapsRepository';
-import ItWidget from '@/widgets/ItWidget';
+import TapWidgIt from '@/widgets/TapWidgIt';
 
 export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
     const db = await SQLite.openDatabaseAsync('taplogit.db');
@@ -23,7 +23,7 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
         case 'WIDGET_ADDED':
         case 'WIDGET_UPDATE':
         case 'WIDGET_RESIZED':
-            props.renderWidget(<ItWidget it={it} latestTap={latestTap} />);
+            props.renderWidget(<TapWidgIt it={it} latestTap={latestTap} />);
             break;
 
         case 'WIDGET_DELETED':
@@ -45,7 +45,7 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
                             return requestWidgetUpdateById({
                                 widgetName: 'It',
                                 widgetId,
-                                renderWidget: () => <ItWidget it={it} latestTap={latestTap} />,
+                                renderWidget: () => <TapWidgIt it={it} latestTap={latestTap} />,
                             });
                         }),
                     );

@@ -13,7 +13,7 @@ import { ItsContext } from '@/its/ItsContext';
 import { ItsRepository } from '@/its/ItsRepository';
 import RestoreItButton from '@/its/RestoreItButton';
 import { TapsRepository } from '@/taps/TapsRepository';
-import ItWidget from '@/widgets/ItWidget';
+import TapWidgIt from '@/widgets/TapWidgIt';
 
 export default function ItsList({ onScroll }: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void }) {
     const { its, refreshIts, showDeleted } = useContext(ItsContext);
@@ -80,7 +80,7 @@ function ItsListItem({ it }: { it: It }) {
                             requestWidgetUpdateById({
                                 widgetName: 'It',
                                 widgetId,
-                                renderWidget: () => <ItWidget it={it} latestTap={latestTap} />,
+                                renderWidget: () => <TapWidgIt it={it} latestTap={latestTap} />,
                             }),
                         ),
                     );
