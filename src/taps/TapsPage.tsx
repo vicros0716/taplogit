@@ -1,7 +1,6 @@
 import { OpUnitType } from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { requestWidgetUpdateById } from 'react-native-android-widget';
 import { ActivityIndicator, SegmentedButtons } from 'react-native-paper';
 import { It } from '@/its/It';
 import { isValidCoalesceBy } from '@/its/ItsRepository';
@@ -10,30 +9,16 @@ import { Tap } from '@/taps/Tap';
 import TapsGraph from '@/taps/TapsGraph';
 import TapsList from '@/taps/TapsList';
 import useTapsRepository from '@/taps/useTapsRepository';
-import TapWidgIt from '@/widgets/TapWidgIt';
-import useWidgetsRepository from '@/widgets/useWidgetsRepository';
 
 export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It }) {
     const [taps, setTaps] = useState<Tap[]>([]);
 
     const itsRepository = useItsRepository();
-    const widgetsRepository = useWidgetsRepository();
     const tapsRepository = useTapsRepository();
     const [refreshing, setRefreshing] = useState(false);
     const refreshTaps = useCallback(async () => {
         const taps = await tapsRepository.getTaps(it);
         setTaps(taps);
-        const latestTap = taps[0];
-        const widgetIds = await widgetsRepository.getWidgetIdsByItId(it.id);
-        await Promise.all(
-            widgetIds.map((widgetId) =>
-                requestWidgetUpdateById({
-                    widgetName: 'It',
-                    widgetId,
-                    renderWidget: () => <TapWidgIt it={it} latestTap={latestTap} />,
-                }),
-            ),
-        );
     }, [it]);
 
     useEffect(() => {
