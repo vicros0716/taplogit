@@ -8,18 +8,20 @@ type DbIt = {
     deleted_at: number | null;
     name: string;
     coalesce_by: string;
+    latest_tapped_at: number | null;
 };
 
 export function isValidCoalesceBy(coalesceBy: string): coalesceBy is OpUnitType {
     return ['week', 'day', 'hour'].includes(coalesceBy);
 }
 
-function convert({ it_id, name, deleted_at, coalesce_by }: DbIt): It {
+function convert({ it_id, name, deleted_at, coalesce_by, latest_tapped_at }: DbIt): It {
     return {
         id: it_id,
         name,
         isDeleted: deleted_at !== null,
         coalesceBy: isValidCoalesceBy(coalesce_by) ? coalesce_by : 'day',
+        latestTap: latest_tapped_at ? dayjs.unix(latest_tapped_at) : null,
     };
 }
 
@@ -38,7 +40,7 @@ export class ItsRepository {
     async getIts(includeDeleted: boolean = false): Promise<It[]> {
         console.debug('Getting all its');
         const result = await this.db.getAllAsync<DbIt>(
-            'SELECT * FROM its WHERE ? = TRUE OR deleted_at IS NULL',
+            'SELECT * FROM its_latest_tap WHERE ? = TRUE OR deleted_at IS NULL',
             includeDeleted,
         );
         console.debug('Got all its');
@@ -77,7 +79,7 @@ export class ItsRepository {
     async getItByWidgetId(widgetId: number) {
         console.debug(`Getting it associated with widget ${widgetId}`);
         const result = await this.db.getFirstAsync<DbIt>(
-            'SELECT * FROM its JOIN it_widgets USING (it_id) WHERE widget_id = ?',
+            'SELECT * FROM its_latest_tap JOIN it_widgets USING (it_id) WHERE widget_id = ?',
             widgetId,
         );
         console.debug(`Got it associated with widget ${widgetId}`);

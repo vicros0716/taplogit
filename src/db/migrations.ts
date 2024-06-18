@@ -18,6 +18,17 @@ const MIGRATIONS: string[] = [
             tapped_at INTEGER             NOT NULL DEFAULT (unixepoch())
         );
         CREATE INDEX taps_its_index ON taps (it_id);
+        CREATE VIEW its_latest_tap
+            (it_id, created_at, deleted_at, name, coalesce_by, latest_tapped_at) AS
+        SELECT its.it_id,
+               its.created_at,
+               its.deleted_at,
+               its.name,
+               its.coalesce_by,
+               MAX(taps.tapped_at)
+        FROM its
+                 LEFT JOIN taps USING (it_id)
+        GROUP BY its.it_id;
         CREATE TABLE it_widgets
         (
             widget_id INTEGER PRIMARY KEY NOT NULL,

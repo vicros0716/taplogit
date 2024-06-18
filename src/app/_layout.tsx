@@ -11,6 +11,7 @@ import { lightTheme } from '@/constants/lightTheme';
 import { initializeDb } from '@/db/initializeDb';
 import ItsContextProvider from '@/its/ItsContextProvider';
 import { WidgetConfigurationScreen } from '@/widgets/WidgetConfigurationScreen';
+import { registerWidgetListener } from '@/widgets/WidgetListener';
 import { widgetTaskHandler } from '@/widgets/widgetTaskHandler';
 
 // See https://day.js.org/docs/en/plugin/utc
@@ -23,6 +24,8 @@ LogBox.ignoreLogs(['Require cycle: node_modules/victory']);
 registerWidgetTaskHandler(widgetTaskHandler);
 // See https://saleksovski.github.io/react-native-android-widget/docs/tutorial/make-widget-configurable
 registerWidgetConfigurationScreen(WidgetConfigurationScreen);
+
+registerWidgetListener();
 
 export default function RootLayout() {
     const colorScheme = useColorScheme();

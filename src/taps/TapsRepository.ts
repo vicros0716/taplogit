@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { It } from '@/its/It';
 import { Tap } from '@/taps/Tap';
+import { eventBus } from '@/util/eventBus';
 
 type DbTap = {
     tap_id: number;
@@ -30,29 +31,15 @@ export class TapsRepository {
         }));
     }
 
-    async getLatestTap(it: It): Promise<Tap | null> {
-        console.debug(`Getting latest tap for ${it.name}`);
-        const result = await this.db.getFirstAsync<DbTap>(
-            'SELECT * FROM taps WHERE it_id = ? ORDER BY tapped_at DESC LIMIT 1',
-            it.id,
-        );
-        console.debug(`Got latest tap for ${it.name}`);
-        return result === null
-            ? null
-            : {
-                  id: result.tap_id,
-                  it,
-                  tappedAt: dayjs.unix(result.tapped_at),
-              };
-    }
-
     async createTap(it: It) {
         console.debug(`Creating new tap for ${it.name}`);
         const result = await this.db.runAsync('INSERT INTO taps (it_id) VALUES (?)', it.id);
         console.debug(`Created new tap for ${it.name}, id: ${result.lastInsertRowId}`);
+        eventBus.dispatch('onCreateTap', { it: { ...it, latestTap: dayjs() } });
         return result;
     }
 
+    // TODO(polish): Deleting a tap does not automatically refresh its associated widgets
     async deleteTap(id: number) {
         console.debug(`Deleting it ${id}`);
         const result = await this.db.runAsync('DELETE FROM taps WHERE tap_id = ?', id);
