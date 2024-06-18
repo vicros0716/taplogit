@@ -1,5 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 import { WidgetTaskHandlerProps } from 'react-native-android-widget';
+import { DATABASE_NAME } from '@/db/constants';
 import { It } from '@/its/It';
 import { ItsRepository } from '@/its/ItsRepository';
 import { TapsRepository } from '@/taps/TapsRepository';
@@ -12,7 +13,7 @@ export async function widgetTaskHandler({
     widgetAction,
     widgetInfo: { widgetId, widgetName },
 }: WidgetTaskHandlerProps) {
-    const db = await SQLite.openDatabaseAsync('taplogit.db');
+    const db = await SQLite.openDatabaseAsync(DATABASE_NAME);
     const widgetsRepository = new WidgetsRepository(db);
     const itsRepository = new ItsRepository(db);
 

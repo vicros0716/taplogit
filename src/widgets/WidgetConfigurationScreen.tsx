@@ -3,6 +3,7 @@ import { useContext, useEffect } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { WidgetConfigurationScreenProps } from 'react-native-android-widget';
 import { Button, PaperProvider, Text } from 'react-native-paper';
+import { DATABASE_NAME } from '@/db/constants';
 import { initializeDb } from '@/db/initializeDb';
 import { ItsContext } from '@/its/ItsContext';
 import ItsContextProvider from '@/its/ItsContextProvider';
@@ -11,7 +12,7 @@ import useWidgetsRepository from '@/widgets/useWidgetsRepository';
 
 export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps) {
     return (
-        <SQLiteProvider databaseName="taplogit.db" onInit={initializeDb}>
+        <SQLiteProvider databaseName={DATABASE_NAME} onInit={initializeDb}>
             <PaperProvider>
                 <ItsContextProvider>
                     <ProvidedWidgetConfigurationScreen {...props} />

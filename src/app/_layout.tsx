@@ -8,6 +8,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from 'react-native-paper';
 import { darkTheme } from '@/constants/darkTheme';
 import { lightTheme } from '@/constants/lightTheme';
+import { DATABASE_NAME } from '@/db/constants';
 import { initializeDb } from '@/db/initializeDb';
 import ItsContextProvider from '@/its/ItsContextProvider';
 import { WidgetConfigurationScreen } from '@/widgets/WidgetConfigurationScreen';
@@ -30,7 +31,7 @@ registerWidgetListener();
 export default function RootLayout() {
     const colorScheme = useColorScheme();
     return (
-        <SQLiteProvider databaseName="taplogit.db" onInit={initializeDb}>
+        <SQLiteProvider databaseName={DATABASE_NAME} onInit={initializeDb}>
             <PaperProvider theme={colorScheme === 'dark' ? darkTheme : lightTheme}>
                 <GestureHandlerRootView>
                     <ItsContextProvider>
