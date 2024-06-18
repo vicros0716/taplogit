@@ -7,10 +7,10 @@ import { registerWidgetConfigurationScreen, registerWidgetTaskHandler } from 're
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from 'react-native-paper';
 import { WidgetConfigurationScreen } from '@/WidgetConfigurationScreen';
-import { darkTheme } from '@/darkTheme';
+import { darkTheme } from '@/constants/darkTheme';
+import { lightTheme } from '@/constants/lightTheme';
 import { initializeDb } from '@/db/initializeDb';
 import ItsContextProvider from '@/its/ItsContextProvider';
-import { lightTheme } from '@/lightTheme';
 import { widgetTaskHandler } from '@/widgetTaskHandler';
 
 // See https://day.js.org/docs/en/plugin/utc
