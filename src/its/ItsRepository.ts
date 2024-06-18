@@ -38,7 +38,8 @@ export class ItsRepository {
     async getIts(includeDeleted: boolean = false): Promise<It[]> {
         console.debug('Getting all its');
         const result = await this.db.getAllAsync<DbIt>(
-            'SELECT * FROM its' + (includeDeleted ? ';' : ' WHERE deleted_at IS NULL;'),
+            'SELECT * FROM its WHERE ? = TRUE OR deleted_at IS NULL',
+            includeDeleted,
         );
         console.debug('Got all its');
         return result.map(convert);
