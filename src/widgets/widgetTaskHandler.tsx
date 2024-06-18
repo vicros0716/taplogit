@@ -4,9 +4,11 @@ import { It } from '@/its/It';
 import { ItsRepository } from '@/its/ItsRepository';
 import { TapsRepository } from '@/taps/TapsRepository';
 import TapWidgIt from '@/widgets/TapWidgIt';
+import { WidgetsRepository } from '@/widgets/WidgetsRepository';
 
 export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
     const db = await SQLite.openDatabaseAsync('taplogit.db');
+    const widgetsRepository = new WidgetsRepository(db);
     const itsRepository = new ItsRepository(db);
 
     const widgetId = props.widgetInfo.widgetId;
@@ -27,16 +29,15 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
             break;
 
         case 'WIDGET_DELETED':
-            await itsRepository.forgetWidget(widgetId);
+            await widgetsRepository.forgetWidget(widgetId);
             break;
 
         case 'WIDGET_CLICK':
             switch (props.clickAction) {
                 case 'TAP':
-                    const tapsRepository = new TapsRepository(db);
                     await tapsRepository.createTap(it);
                     const latestTap = await tapsRepository.getLatestTap(it);
-                    const widgetIds = await itsRepository.getWidgetIdsByItId(it.id);
+                    const widgetIds = await widgetsRepository.getWidgetIdsByItId(it.id);
                     await Promise.all(
                         widgetIds.map((widgetId) => {
                             console.log(

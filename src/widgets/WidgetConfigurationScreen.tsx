@@ -7,9 +7,9 @@ import { initializeDb } from '@/db/initializeDb';
 import { It } from '@/its/It';
 import { ItsContext } from '@/its/ItsContext';
 import ItsContextProvider from '@/its/ItsContextProvider';
-import useItsRepository from '@/its/useItsRepository';
 import useTapsRepository from '@/taps/useTapsRepository';
 import TapWidgIt from '@/widgets/TapWidgIt';
+import useWidgetsRepository from '@/widgets/useWidgetsRepository';
 
 export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps) {
     return (
@@ -63,13 +63,13 @@ function WidgetConfigurationScreenListItem({
     widgetId: number;
     onPress: (widget: JSX.Element) => void;
 }) {
-    const itsRepository = useItsRepository();
+    const widgetsRepository = useWidgetsRepository();
     const tapsRepository = useTapsRepository();
     return (
         <Button
             mode="contained"
             onPress={async () => {
-                await itsRepository.associateWidget(it.id, widgetId);
+                await widgetsRepository.associateWidget(it.id, widgetId);
                 const latestTap = await tapsRepository.getLatestTap(it);
                 onPress(<TapWidgIt it={it} latestTap={latestTap} />);
             }}>

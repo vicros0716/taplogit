@@ -1,19 +1,18 @@
 import { Link } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
 import { useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { requestWidgetUpdateById } from 'react-native-android-widget';
 import { Swipeable } from 'react-native-gesture-handler';
-import { Button, IconButton, Portal, Snackbar, Text, useTheme } from 'react-native-paper';
+import { IconButton, Portal, Snackbar, Text, useTheme } from 'react-native-paper';
 import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import DeleteItButton from '@/its/DeleteItButton';
 import { It } from '@/its/It';
 import { ItsContext } from '@/its/ItsContext';
-import { ItsRepository } from '@/its/ItsRepository';
 import RestoreItButton from '@/its/RestoreItButton';
-import { TapsRepository } from '@/taps/TapsRepository';
+import useTapsRepository from '@/taps/useTapsRepository';
 import TapWidgIt from '@/widgets/TapWidgIt';
+import useWidgetsRepository from '@/widgets/useWidgetsRepository';
 
 export default function ItsList({ onScroll }: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void }) {
     const { its, refreshIts, showDeleted } = useContext(ItsContext);
@@ -55,9 +54,8 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
 }
 
 function ItsListItem({ it }: { it: It }) {
-    const db = useSQLiteContext();
-    const tapsRepository = new TapsRepository(db);
-    const itsRepository = new ItsRepository(db);
+    const tapsRepository = useTapsRepository();
+    const widgetsRepository = useWidgetsRepository();
     const [isSnackbarVisible, setSnackbarVisible] = useState(false);
     const theme = useTheme();
 
@@ -74,7 +72,7 @@ function ItsListItem({ it }: { it: It }) {
                 onPress={async () => {
                     await tapsRepository.createTap(it);
                     const latestTap = await tapsRepository.getLatestTap(it);
-                    const widgetIds = await itsRepository.getWidgetIdsByItId(it.id);
+                    const widgetIds = await widgetsRepository.getWidgetIdsByItId(it.id);
                     await Promise.all(
                         widgetIds.map((widgetId) =>
                             requestWidgetUpdateById({
