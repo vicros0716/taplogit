@@ -1,9 +1,17 @@
-const IS_DEV = process.env.ENVIRONMENT === 'development';
-const IS_STG = process.env.ENVIRONMENT === 'staging';
+function environmentSpecific(production, preview, development) {
+    switch (process.env.ENVIRONMENT) {
+        case 'development':
+            return development;
+        case 'preview':
+            return preview;
+        default:
+            return production;
+    }
+}
 
 export default {
     expo: {
-        name: IS_DEV ? 'taplogit (Dev)' : IS_STG ? 'taplogit (Stg)' : 'taplogit',
+        name: `taplogit${environmentSpecific('', ' (Stg)', ' (Dev)')}`,
         slug: 'taplogit',
         owner: 'vicros0716',
         version: '1.0.0',
@@ -18,14 +26,14 @@ export default {
         },
         ios: {
             supportsTablet: true,
-            bundleIdentifier: IS_DEV ? 'com.taplogit.dev' : IS_STG ? 'com.taplogit.stg' : 'com.taplogit',
+            bundleIdentifier: `com.taplogit${environmentSpecific('', '.stg', '.dev')}`,
         },
         android: {
             adaptiveIcon: {
                 foregroundImage: './assets/images/adaptive-icon.png',
                 backgroundColor: '#ffffff',
             },
-            package: IS_DEV ? 'com.taplogit.dev' : IS_STG ? 'com.taplogit.stg' : 'com.taplogit',
+            package: `com.taplogit${environmentSpecific('', '.stg', '.dev')}`,
         },
         web: {
             bundler: 'metro',
