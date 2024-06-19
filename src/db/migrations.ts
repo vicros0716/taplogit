@@ -5,11 +5,12 @@ const MIGRATIONS: string[] = [
     `
         CREATE TABLE its
         (
-            it_id       INTEGER PRIMARY KEY NOT NULL,
-            created_at  INTEGER             NOT NULL DEFAULT (unixepoch()),
+            it_id       INTEGER PRIMARY KEY                    NOT NULL,
+            created_at  INTEGER                                NOT NULL DEFAULT (unixepoch()),
             deleted_at  INTEGER,
-            name        TEXT                NOT NULL,
-            coalesce_by TEXT                NOT NULL DEFAULT 'day'
+            name        TEXT                                   NOT NULL,
+            type        TEXT CHECK (type IN ('tap', 'switch')) NOT NULL DEFAULT 'tap',
+            coalesce_by TEXT                                   NOT NULL DEFAULT 'day'
         );
         CREATE TABLE taps
         (
@@ -19,11 +20,12 @@ const MIGRATIONS: string[] = [
         );
         CREATE INDEX taps_its_index ON taps (it_id);
         CREATE VIEW its_latest_tap
-            (it_id, created_at, deleted_at, name, coalesce_by, latest_tapped_at) AS
+                    (it_id, created_at, deleted_at, name, type, coalesce_by, latest_tapped_at) AS
         SELECT its.it_id,
                its.created_at,
                its.deleted_at,
                its.name,
+               its.type,
                its.coalesce_by,
                MAX(taps.tapped_at)
         FROM its

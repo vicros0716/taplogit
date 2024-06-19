@@ -51,9 +51,9 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
 }
 
 function ItsListItem({ it }: { it: It }) {
-    const tapsRepository = useTapsRepository();
     const [isSnackbarVisible, setSnackbarVisible] = useState(false);
     const theme = useTheme();
+    const tapsRepository = useTapsRepository();
 
     return (
         <View style={styles.container}>
@@ -62,9 +62,8 @@ function ItsListItem({ it }: { it: It }) {
                     {it.name}
                 </Text>
             </Link>
-            <IconButton
-                icon="gesture-tap"
-                iconColor={theme.colors.onSurface}
+            <ItsListItemAction
+                it={it}
                 onPress={async () => {
                     await tapsRepository.createTap(it);
                     setSnackbarVisible(true);
@@ -77,6 +76,17 @@ function ItsListItem({ it }: { it: It }) {
             </Portal>
         </View>
     );
+}
+
+function ItsListItemAction({ it, onPress }: { it: It; onPress: () => Promise<void> }) {
+    const theme = useTheme();
+
+    switch (it.type) {
+        case 'tap':
+            return <IconButton icon="gesture-tap" iconColor={theme.colors.onSurface} onPress={onPress} />;
+        case 'switch':
+            return <IconButton icon="toggle-switch-outline" iconColor={theme.colors.onSurface} onPress={onPress} />;
+    }
 }
 
 const styles = StyleSheet.create({

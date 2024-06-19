@@ -1,12 +1,13 @@
 import dayjs, { OpUnitType } from 'dayjs';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { It } from '@/its/It';
+import { asValidItType, DEFAULT_IT_TYPE, isValidItType, It, ItType } from '@/its/It';
 
 type DbIt = {
     it_id: number;
     created_at: number;
     deleted_at: number | null;
     name: string;
+    type: string;
     coalesce_by: string;
     latest_tapped_at: number | null;
 };
@@ -15,11 +16,12 @@ export function isValidCoalesceBy(coalesceBy: string): coalesceBy is OpUnitType 
     return ['week', 'day', 'hour'].includes(coalesceBy);
 }
 
-function convert({ it_id, name, deleted_at, coalesce_by, latest_tapped_at }: DbIt): It {
+function convert({ it_id, name, deleted_at, type, coalesce_by, latest_tapped_at }: DbIt): It {
     return {
         id: it_id,
         name,
         isDeleted: deleted_at !== null,
+        type: asValidItType(type),
         coalesceBy: isValidCoalesceBy(coalesce_by) ? coalesce_by : 'day',
         latestTap: latest_tapped_at ? dayjs.unix(latest_tapped_at) : null,
     };
@@ -47,10 +49,10 @@ export class ItsRepository {
         return result.map(convert);
     }
 
-    async createIt(name: string) {
-        console.debug(`Creating new it ${name}`);
-        const result = await this.db.runAsync('INSERT INTO its (name) VALUES (?)', name);
-        console.debug(`Created new it ${name}; id: ${result.lastInsertRowId}`);
+    async createIt(name: string, type: ItType) {
+        console.debug(`Creating new ${type} it ${name}`);
+        const result = await this.db.runAsync('INSERT INTO its (name, type) VALUES (?, ?)', name, type);
+        console.debug(`Created new ${type} it ${name}; id: ${result.lastInsertRowId}`);
         return result;
     }
 
