@@ -1,8 +1,8 @@
 import dayjs, { Dayjs, ManipulateType } from 'dayjs';
 import { Tap } from '@/taps/Tap';
 
-export function asTapData(taps: Tap[], coalesceBy: ManipulateType) {
-    const aggregatedTaps = taps
+export function aggregateAsTaps(taps: Tap[], coalesceBy: ManipulateType) {
+    return taps
         .map((tap) => tap.tappedAt.tz().startOf(coalesceBy).unix().toString())
         .reduce<{ [timestampString: string]: number }>(
             (acc, tappedAtTimestampString) => ({
@@ -11,14 +11,10 @@ export function asTapData(taps: Tap[], coalesceBy: ManipulateType) {
             }),
             {},
         );
-    return Object.entries(aggregatedTaps).map(([timestampString, count]) => ({
-        x: dayjs.unix(parseInt(timestampString)).toDate(),
-        y: count,
-    }));
 }
 
-export function asSwitchData(taps: Tap[], coalesceBy: ManipulateType) {
-    const aggregatedTaps = taps
+export function aggregateAsSwitch(taps: Tap[], coalesceBy: ManipulateType) {
+    return taps
         .map((tap) => tap.tappedAt.tz())
         .reduce<[Dayjs, Dayjs][]>((acc, tappedAt, currentIndex) => {
             if (currentIndex % 2 === 0) {
@@ -61,8 +57,4 @@ export function asSwitchData(taps: Tap[], coalesceBy: ManipulateType) {
             });
             return nextAcc;
         }, {});
-    return Object.entries(aggregatedTaps).map(([timestampString, minutes]) => ({
-        x: dayjs.unix(parseInt(timestampString)).toDate(),
-        y: minutes,
-    }));
 }

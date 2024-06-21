@@ -4,7 +4,7 @@ import Timezone from 'dayjs/plugin/timezone';
 import UTC from 'dayjs/plugin/utc';
 import MockDate from 'mockdate';
 import { Tap } from '@/taps/Tap';
-import { asSwitchData, asTapData } from '@/taps/TapsGraphHelpers';
+import { aggregateAsSwitch, aggregateAsTaps } from '@/taps/TapsGraphHelpers';
 
 beforeAll(() => {
     dayjs.extend(UTC);
@@ -38,72 +38,72 @@ beforeEach(() => {
     ];
 });
 
-describe('asTapData', () => {
+describe('aggregateAsTaps', () => {
     it.each([
         {
             coalescedBy: 'day',
-            expected: [
-                { x: new Date('2024-05-26T07:00:00.000Z'), y: 2 },
-                { x: new Date('2024-05-27T07:00:00.000Z'), y: 1 },
-                { x: new Date('2024-05-29T07:00:00.000Z'), y: 3 },
-                { x: new Date('2024-05-31T07:00:00.000Z'), y: 1 },
-                { x: new Date('2024-06-02T07:00:00.000Z'), y: 1 },
-                { x: new Date('2024-06-03T07:00:00.000Z'), y: 2 },
-                { x: new Date('2024-06-06T07:00:00.000Z'), y: 3 },
-            ],
+            expected: {
+                [dayjs('2024-05-26T07:00:00.000Z').unix().toString()]: 2,
+                [dayjs('2024-05-27T07:00:00.000Z').unix().toString()]: 1,
+                [dayjs('2024-05-29T07:00:00.000Z').unix().toString()]: 3,
+                [dayjs('2024-05-31T07:00:00.000Z').unix().toString()]: 1,
+                [dayjs('2024-06-02T07:00:00.000Z').unix().toString()]: 1,
+                [dayjs('2024-06-03T07:00:00.000Z').unix().toString()]: 2,
+                [dayjs('2024-06-06T07:00:00.000Z').unix().toString()]: 3,
+            },
         },
         {
             coalescedBy: 'week',
-            expected: [
-                { x: new Date('2024-05-26T07:00:00.000Z'), y: 7 },
-                { x: new Date('2024-06-02T07:00:00.000Z'), y: 6 },
-            ],
+            expected: {
+                [dayjs('2024-05-26T07:00:00.000Z').unix().toString()]: 7,
+                [dayjs('2024-06-02T07:00:00.000Z').unix().toString()]: 6,
+            },
         },
         {
             coalescedBy: 'month',
-            expected: [
-                { x: new Date('2024-05-01T07:00:00.000Z'), y: 7 },
-                { x: new Date('2024-06-01T07:00:00.000Z'), y: 6 },
-            ],
+            expected: {
+                [dayjs('2024-05-01T07:00:00.000Z').unix().toString()]: 7,
+                [dayjs('2024-06-01T07:00:00.000Z').unix().toString()]: 6,
+            },
         },
     ])('properly aggregates when coalesced by $coalescedBy', ({ coalescedBy, expected }) => {
-        const data = asTapData(taps, coalescedBy as ManipulateType);
+        const data = aggregateAsTaps(taps, coalescedBy as ManipulateType);
         expect(data).toEqual(expected);
     });
 });
 
-describe('asSwitchData', () => {
+describe('aggregateAsSwitch', () => {
     it.each([
         {
             coalescedBy: 'day',
-            expected: [
-                { x: new Date('2024-05-26T07:00:00.000Z'), y: 1129 },
-                { x: new Date('2024-05-27T07:00:00.000Z'), y: 1145 },
-                { x: new Date('2024-05-28T07:00:00.000Z'), y: 1440 },
-                { x: new Date('2024-05-29T07:00:00.000Z'), y: 194 },
-                { x: new Date('2024-05-31T07:00:00.000Z'), y: 197 },
-                { x: new Date('2024-06-01T07:00:00.000Z'), y: 1440 },
-                { x: new Date('2024-06-02T07:00:00.000Z'), y: 853 },
-                { x: new Date('2024-06-03T07:00:00.000Z'), y: 445 },
-                { x: new Date('2024-06-06T07:00:00.000Z'), y: 728 },
-            ],
+            expected: {
+                [dayjs('2024-05-26T07:00:00.000Z').unix().toString()]: 1129,
+                [dayjs('2024-05-27T07:00:00.000Z').unix().toString()]: 1145,
+                [dayjs('2024-05-28T07:00:00.000Z').unix().toString()]: 1440,
+                [dayjs('2024-05-29T07:00:00.000Z').unix().toString()]: 194,
+                [dayjs('2024-05-31T07:00:00.000Z').unix().toString()]: 197,
+                [dayjs('2024-06-01T07:00:00.000Z').unix().toString()]: 1440,
+                [dayjs('2024-06-02T07:00:00.000Z').unix().toString()]: 853,
+                [dayjs('2024-06-03T07:00:00.000Z').unix().toString()]: 445,
+                [dayjs('2024-06-06T07:00:00.000Z').unix().toString()]: 728,
+            },
         },
         {
             coalescedBy: 'week',
-            expected: [
-                { x: new Date('2024-05-26T07:00:00.000Z'), y: 5545 },
-                { x: new Date('2024-06-02T07:00:00.000Z'), y: 2026 },
-            ],
+            expected: {
+                [dayjs('2024-05-26T07:00:00.000Z').unix().toString()]: 5545,
+                [dayjs('2024-06-02T07:00:00.000Z').unix().toString()]: 2026,
+            },
         },
         {
             coalescedBy: 'month',
-            expected: [
-                { x: new Date('2024-05-01T07:00:00.000Z'), y: 4105 },
-                { x: new Date('2024-06-01T07:00:00.000Z'), y: 3466 },
-            ],
+            expected: {
+                [dayjs('2024-05-01T07:00:00.000Z').unix().toString()]: 4105,
+                [dayjs('2024-06-01T07:00:00.000Z').unix().toString()]: 3466,
+            },
         },
     ])('properly aggregates when coalesced by $coalescedBy', ({ coalescedBy, expected }) => {
-        const data = asSwitchData(taps, coalescedBy as ManipulateType);
+        const data = aggregateAsSwitch(taps, coalescedBy as ManipulateType);
         expect(data).toEqual(expected);
     });
 });

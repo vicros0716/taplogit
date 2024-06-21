@@ -1,10 +1,10 @@
-import { ManipulateType } from 'dayjs';
+import dayjs, { ManipulateType } from 'dayjs';
 import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
 import { ItType } from '@/its/It';
 import { Tap } from '@/taps/Tap';
-import { asSwitchData, asTapData } from '@/taps/TapsGraphHelpers';
+import { aggregateAsSwitch, aggregateAsTaps } from '@/taps/TapsGraphHelpers';
 
 export default function TapsGraph({
     taps,
@@ -16,8 +16,12 @@ export default function TapsGraph({
     coalesceBy: ManipulateType;
 }) {
     const theme = useTheme();
-    const converter = type === 'tap' ? asTapData : asSwitchData;
-    const data = converter(taps, coalesceBy);
+    const aggregate = type === 'tap' ? aggregateAsTaps : aggregateAsSwitch;
+    const aggregatedTaps = aggregate(taps, coalesceBy);
+    const data = Object.entries(aggregatedTaps).map(([timestampString, count]) => ({
+        x: dayjs.unix(parseInt(timestampString)).toDate(),
+        y: count,
+    }));
 
     return (
         <View>
