@@ -1,9 +1,8 @@
-import { OpUnitType } from 'dayjs';
+import { ManipulateType } from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator, SegmentedButtons } from 'react-native-paper';
-import { It } from '@/its/It';
-import { isValidCoalesceBy } from '@/its/ItsRepository';
+import { asValidCoalesceBy, DEFAULT_COALESCE_BY, It } from '@/its/It';
 import useItsRepository from '@/its/useItsRepository';
 import { Tap } from '@/taps/Tap';
 import TapsGraph from '@/taps/TapsGraph';
@@ -31,7 +30,7 @@ export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It 
         setup();
     }, []);
 
-    const [coalesceBy, setCoalesceBy] = useState<OpUnitType>('day');
+    const [coalesceBy, setCoalesceBy] = useState(DEFAULT_COALESCE_BY);
     return (
         <View>
             <SegmentedButtons
@@ -42,7 +41,7 @@ export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It 
                 ]}
                 value={coalesceBy}
                 onValueChange={async (value) => {
-                    const coalesceBy: OpUnitType = isValidCoalesceBy(value) ? value : 'day';
+                    const coalesceBy: ManipulateType = asValidCoalesceBy(value);
                     await itsRepository.setCoalesceBy(it.id, coalesceBy);
                     setCoalesceBy(coalesceBy);
                 }}
@@ -50,9 +49,9 @@ export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It 
             />
             {refreshing && <ActivityIndicator animating />}
             {mode === 'chart' ? (
-                <TapsGraph taps={taps} coalesceBy={coalesceBy} />
+                <TapsGraph taps={taps} type={it.type} coalesceBy={coalesceBy} />
             ) : mode === 'list' ? (
-                <TapsList taps={taps} refreshTaps={refreshTaps} coalesceBy={coalesceBy} />
+                <TapsList taps={taps} type={it.type} refreshTaps={refreshTaps} coalesceBy={coalesceBy} />
             ) : null}
         </View>
     );

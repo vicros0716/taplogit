@@ -1,14 +1,16 @@
-import { Dayjs, OpUnitType } from 'dayjs';
+import { Dayjs, ManipulateType } from 'dayjs';
 
-export const IT_TYPES = ['tap', 'switch'] as const;
-export const DEFAULT_IT_TYPE = IT_TYPES[0];
+const IT_TYPES = ['tap', 'switch'] as const;
+export const DEFAULT_IT_TYPE: ItType = IT_TYPES[0];
 export type ItType = (typeof IT_TYPES)[number];
 
-export function isValidItType(itType: string): itType is ItType {
-    return IT_TYPES.includes(itType as ItType);
-}
 export function asValidItType(type: string): ItType {
-    return isValidItType(type) ? type : DEFAULT_IT_TYPE;
+    return IT_TYPES.includes(type as ItType) ? (type as ItType) : DEFAULT_IT_TYPE;
+}
+
+export const DEFAULT_COALESCE_BY: ManipulateType = 'day';
+export function asValidCoalesceBy(coalesceBy: string): ManipulateType {
+    return ['week', 'day', 'hour'].includes(coalesceBy) ? (coalesceBy as ManipulateType) : DEFAULT_COALESCE_BY;
 }
 
 export type It = {
@@ -16,6 +18,6 @@ export type It = {
     name: string;
     isDeleted: boolean;
     type: ItType;
-    coalesceBy: OpUnitType;
+    coalesceBy: ManipulateType;
     latestTap: Dayjs | null;
 };

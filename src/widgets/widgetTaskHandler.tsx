@@ -1,7 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 import { WidgetTaskHandlerProps } from 'react-native-android-widget';
 import { DATABASE_NAME } from '@/db/constants';
-import { It } from '@/its/It';
+import { DEFAULT_COALESCE_BY, DEFAULT_IT_TYPE, It } from '@/its/It';
 import { ItsRepository } from '@/its/ItsRepository';
 import { TapsRepository } from '@/taps/TapsRepository';
 import TapWidgIt from '@/widgets/TapWidgIt';
@@ -21,7 +21,8 @@ export async function widgetTaskHandler({
         id: 0,
         name: 'unconfigured widget',
         isDeleted: false,
-        coalesceBy: 'day',
+        type: DEFAULT_IT_TYPE,
+        coalesceBy: DEFAULT_COALESCE_BY,
         latestTap: null,
     };
     const tapsRepository = new TapsRepository(db);

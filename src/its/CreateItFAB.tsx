@@ -24,7 +24,7 @@ export default function CreateItFAB({ extended }: { extended: boolean }) {
 
 function CreateItDialog({ visible, onDismiss }: { visible: boolean; onDismiss: () => void }) {
     const [name, setName] = useState('');
-    const [type, setType] = useState<ItType>(DEFAULT_IT_TYPE);
+    const [type, setType] = useState(DEFAULT_IT_TYPE);
     const { refreshIts } = useContext(ItsContext);
     const itsRepository = useItsRepository();
 

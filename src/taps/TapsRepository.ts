@@ -26,7 +26,6 @@ export class TapsRepository {
         console.debug(`Got all taps for ${it.name}`);
         return result.map(({ tap_id, tapped_at }) => ({
             id: tap_id,
-            it,
             tappedAt: dayjs.unix(tapped_at),
         }));
     }

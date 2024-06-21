@@ -1,19 +1,22 @@
-import dayjs, { OpUnitType } from 'dayjs';
+import dayjs, { ManipulateType } from 'dayjs';
 import { useState } from 'react';
 import { SectionList, StyleSheet, View } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { IconButton, Text } from 'react-native-paper';
+import { ItType } from '@/its/It';
 import { Tap } from '@/taps/Tap';
 import useTapsRepository from '@/taps/useTapsRepository';
 
 export default function TapsList({
     taps,
     refreshTaps,
+    type,
     coalesceBy,
 }: {
     taps: Tap[];
     refreshTaps: () => Promise<void>;
-    coalesceBy: OpUnitType;
+    type: ItType;
+    coalesceBy: ManipulateType;
 }) {
     const tapsRepository = useTapsRepository();
     const [refreshing, setRefreshing] = useState(false);

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { WidgetPreview } from 'react-native-android-widget';
-import { It } from '@/its/It';
+import { DEFAULT_COALESCE_BY, DEFAULT_IT_TYPE, It } from '@/its/It';
 import TapWidgIt from '@/widgets/TapWidgIt';
 
 export default function ItWidgetPreview() {
@@ -13,7 +13,8 @@ export default function ItWidgetPreview() {
                         id: 2,
                         name: 'Preview widget',
                         isDeleted: false,
-                        coalesceBy: 'day',
+                        type: DEFAULT_IT_TYPE,
+                        coalesceBy: DEFAULT_COALESCE_BY,
                         latestTap: dayjs(),
                     };
                     return <TapWidgIt it={it} />;

@@ -1,6 +1,6 @@
-import dayjs, { OpUnitType } from 'dayjs';
+import dayjs, { ManipulateType } from 'dayjs';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { asValidItType, DEFAULT_IT_TYPE, isValidItType, It, ItType } from '@/its/It';
+import { asValidCoalesceBy, asValidItType, It, ItType } from '@/its/It';
 
 type DbIt = {
     it_id: number;
@@ -12,17 +12,13 @@ type DbIt = {
     latest_tapped_at: number | null;
 };
 
-export function isValidCoalesceBy(coalesceBy: string): coalesceBy is OpUnitType {
-    return ['week', 'day', 'hour'].includes(coalesceBy);
-}
-
 function convert({ it_id, name, deleted_at, type, coalesce_by, latest_tapped_at }: DbIt): It {
     return {
         id: it_id,
         name,
         isDeleted: deleted_at !== null,
         type: asValidItType(type),
-        coalesceBy: isValidCoalesceBy(coalesce_by) ? coalesce_by : 'day',
+        coalesceBy: asValidCoalesceBy(coalesce_by),
         latestTap: latest_tapped_at ? dayjs.unix(latest_tapped_at) : null,
     };
 }
@@ -71,7 +67,7 @@ export class ItsRepository {
         return result;
     }
 
-    async setCoalesceBy(id: number, coalesceBy: OpUnitType) {
+    async setCoalesceBy(id: number, coalesceBy: ManipulateType) {
         console.debug(`Setting coalesce by ${coalesceBy} for it ${id}`);
         const result = await this.db.runAsync('UPDATE its SET coalesce_by = ? WHERE it_id = ?', coalesceBy, id);
         console.debug(`Set coalesce by ${coalesceBy} for it ${id}`);

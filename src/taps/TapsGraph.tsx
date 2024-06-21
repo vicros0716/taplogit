@@ -1,25 +1,24 @@
-import dayjs, { OpUnitType } from 'dayjs';
+import { ManipulateType } from 'dayjs';
 import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
+import { ItType } from '@/its/It';
 import { Tap } from '@/taps/Tap';
+import { asSwitchData, asTapData } from '@/taps/TapsGraphHelpers';
 
-export default function TapsGraph({ taps, coalesceBy }: { taps: Tap[]; coalesceBy: OpUnitType }) {
+export default function TapsGraph({
+    taps,
+    type,
+    coalesceBy,
+}: {
+    taps: Tap[];
+    type: ItType;
+    coalesceBy: ManipulateType;
+}) {
     const theme = useTheme();
-    const coalescedTaps = taps.reduce(
-        (acc, tap) => {
-            const tappedAtISOString = tap.tappedAt.startOf(coalesceBy).toISOString();
-            return {
-                ...acc,
-                [tappedAtISOString]: (acc[tappedAtISOString] ?? 0) + 1,
-            };
-        },
-        {} as { [key: string]: number },
-    );
-    const data = Object.entries(coalescedTaps).map(([tappedAtISOString, count]) => ({
-        tappedAt: dayjs(tappedAtISOString).toDate(),
-        count,
-    }));
+    const converter = type === 'tap' ? asTapData : asSwitchData;
+    const data = converter(taps, coalesceBy);
+
     return (
         <View>
             <VictoryChart
@@ -46,8 +45,6 @@ export default function TapsGraph({ taps, coalesceBy }: { taps: Tap[]; coalesceB
                 }}>
                 <VictoryBar
                     data={data}
-                    x="tappedAt"
-                    y="count"
                     style={{
                         data: {
                             fill: theme.colors.secondaryContainer,
