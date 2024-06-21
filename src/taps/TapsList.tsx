@@ -5,6 +5,7 @@ import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { IconButton, Text } from 'react-native-paper';
 import { ItType } from '@/its/It';
 import { Tap } from '@/taps/Tap';
+import { aggregateAsTaps } from '@/taps/TapsListHelpers';
 import useTapsRepository from '@/taps/useTapsRepository';
 
 export default function TapsList({
@@ -21,13 +22,7 @@ export default function TapsList({
     const tapsRepository = useTapsRepository();
     const [refreshing, setRefreshing] = useState(false);
 
-    const coalescedTaps = taps.reduce<{ [key: string]: Tap[] }>((acc, tap) => {
-        const tappedAtISOString = tap.tappedAt.startOf(coalesceBy).toISOString();
-        return {
-            ...acc,
-            [tappedAtISOString]: [...(acc[tappedAtISOString] ?? []), tap],
-        };
-    }, {});
+    const coalescedTaps = aggregateAsTaps(taps, coalesceBy);
     const data = Object.entries(coalescedTaps).map(([tappedAtISOString, taps]) => {
         const coalescedTappedAt = dayjs(tappedAtISOString);
         let title = coalescedTappedAt.format('MMM D, YYYY');
