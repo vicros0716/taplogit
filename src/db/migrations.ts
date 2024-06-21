@@ -5,13 +5,14 @@ const MIGRATIONS: string[] = [
     `
         CREATE TABLE its
         (
-            it_id       INTEGER PRIMARY KEY                    NOT NULL,
-            created_at  INTEGER                                NOT NULL DEFAULT (unixepoch()),
+            it_id       INTEGER PRIMARY KEY                                 NOT NULL,
+            created_at  INTEGER                                             NOT NULL DEFAULT (unixepoch()),
             deleted_at  INTEGER,
-            name        TEXT                                   NOT NULL,
-            type        TEXT CHECK (type IN ('tap', 'switch')) NOT NULL DEFAULT 'tap',
-            coalesce_by TEXT                                   NOT NULL DEFAULT 'day'
+            name        TEXT                                                NOT NULL,
+            type        TEXT CHECK (type IN ('tap', 'switch'))              NOT NULL DEFAULT 'tap',
+            coalesce_by TEXT CHECK (coalesce_by IN ('week', 'day', 'hour')) NOT NULL DEFAULT 'day'
         );
+
         CREATE TABLE taps
         (
             tap_id    INTEGER PRIMARY KEY NOT NULL,
@@ -19,6 +20,7 @@ const MIGRATIONS: string[] = [
             tapped_at INTEGER             NOT NULL DEFAULT (unixepoch())
         );
         CREATE INDEX taps_its_index ON taps (it_id);
+
         CREATE VIEW its_latest_tap
                     (it_id, created_at, deleted_at, name, type, coalesce_by, latest_tapped_at) AS
         SELECT its.it_id,
@@ -31,6 +33,7 @@ const MIGRATIONS: string[] = [
         FROM its
                  LEFT JOIN taps USING (it_id)
         GROUP BY its.it_id;
+
         CREATE TABLE it_widgets
         (
             widget_id INTEGER PRIMARY KEY NOT NULL,
