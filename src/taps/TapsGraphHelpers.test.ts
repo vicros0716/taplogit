@@ -39,7 +39,7 @@ beforeEach(() => {
 });
 
 describe('aggregateAsTaps', () => {
-    it.each([
+    it.each<{ coalescedBy: ManipulateType; expected: { [key: string]: number } }>([
         {
             coalescedBy: 'day',
             expected: {
@@ -67,13 +67,13 @@ describe('aggregateAsTaps', () => {
             },
         },
     ])('properly aggregates when coalesced by $coalescedBy', ({ coalescedBy, expected }) => {
-        const data = aggregateAsTaps(taps, coalescedBy as ManipulateType);
+        const data = aggregateAsTaps(taps, coalescedBy);
         expect(data).toEqual(expected);
     });
 });
 
 describe('aggregateAsSwitch', () => {
-    it.each([
+    it.each<{ coalescedBy: ManipulateType; expected: { [key: string]: number } }>([
         {
             coalescedBy: 'day',
             expected: {
@@ -103,7 +103,7 @@ describe('aggregateAsSwitch', () => {
             },
         },
     ])('properly aggregates when coalesced by $coalescedBy', ({ coalescedBy, expected }) => {
-        const data = aggregateAsSwitch(taps, coalescedBy as ManipulateType);
+        const data = aggregateAsSwitch(taps, coalescedBy);
         expect(data).toEqual(expected);
     });
 });

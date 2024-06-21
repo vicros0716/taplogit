@@ -21,16 +21,13 @@ export default function TapsList({
     const tapsRepository = useTapsRepository();
     const [refreshing, setRefreshing] = useState(false);
 
-    const coalescedTaps = taps.reduce(
-        (acc, tap) => {
-            const tappedAtISOString = tap.tappedAt.startOf(coalesceBy).toISOString();
-            return {
-                ...acc,
-                [tappedAtISOString]: [...(acc[tappedAtISOString] ?? []), tap],
-            };
-        },
-        {} as { [key: string]: Tap[] },
-    );
+    const coalescedTaps = taps.reduce<{ [key: string]: Tap[] }>((acc, tap) => {
+        const tappedAtISOString = tap.tappedAt.startOf(coalesceBy).toISOString();
+        return {
+            ...acc,
+            [tappedAtISOString]: [...(acc[tappedAtISOString] ?? []), tap],
+        };
+    }, {});
     const data = Object.entries(coalescedTaps).map(([tappedAtISOString, taps]) => {
         const coalescedTappedAt = dayjs(tappedAtISOString);
         let title = coalescedTappedAt.format('MMM D, YYYY');
