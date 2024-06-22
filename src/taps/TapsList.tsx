@@ -1,15 +1,14 @@
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { SectionList, StyleSheet, View } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { IconButton, Text } from 'react-native-paper';
-import { It } from '@/its/It';
 import { Tap } from '@/taps/Tap';
+import { TapsContext } from '@/taps/TapsContext';
 import { aggregateAsTaps } from '@/taps/TapsListHelpers';
-import useTapsRepository from '@/taps/useTapsRepository';
 
-export default function TapsList({ it, taps, refreshTaps }: { it: It; taps: Tap[]; refreshTaps: () => Promise<void> }) {
-    const tapsRepository = useTapsRepository();
+export default function TapsList() {
+    const { tapsRepository, it, taps, refreshTaps } = useContext(TapsContext);
     const [refreshing, setRefreshing] = useState(false);
     const coalescedTaps = aggregateAsTaps(taps, it.coalesceBy);
     const data = Object.entries(coalescedTaps).map(([tappedAtISOString, taps]) => {

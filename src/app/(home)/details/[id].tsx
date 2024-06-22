@@ -5,6 +5,7 @@ import { IconButton, useTheme } from 'react-native-paper';
 import { ViewType } from '@/its/It';
 import { ItDialogContext } from '@/its/ItDialogContext';
 import { ItsContext } from '@/its/ItsContext';
+import TapsContextProvider from '@/taps/TapsContextProvider';
 import TapsPage from '@/taps/TapsPage';
 import { assertedNonNull } from '@/util/assert';
 
@@ -33,30 +34,32 @@ export default function ItDetailsScreen() {
     }
 
     return (
-        <View>
-            <Stack.Screen
-                options={{
-                    title: it.name,
-                    headerRight: () => (
-                        <>
-                            <IconButton
-                                iconColor={theme.colors.onPrimary}
-                                icon="pencil-outline"
-                                onPress={() => show(it)}
-                            />
-                            <IconButton
-                                iconColor={theme.colors.onPrimary}
-                                icon={icons[nextView]}
-                                onPress={async () => {
-                                    await itsRepository.setView(it.id, nextView);
-                                    await refreshIts();
-                                }}
-                            />
-                        </>
-                    ),
-                }}
-            />
-            <TapsPage it={it} />
-        </View>
+        <TapsContextProvider it={it}>
+            <View>
+                <Stack.Screen
+                    options={{
+                        title: it.name,
+                        headerRight: () => (
+                            <>
+                                <IconButton
+                                    iconColor={theme.colors.onPrimary}
+                                    icon="pencil-outline"
+                                    onPress={() => show(it)}
+                                />
+                                <IconButton
+                                    iconColor={theme.colors.onPrimary}
+                                    icon={icons[nextView]}
+                                    onPress={async () => {
+                                        await itsRepository.setView(it.id, nextView);
+                                        await refreshIts();
+                                    }}
+                                />
+                            </>
+                        ),
+                    }}
+                />
+                <TapsPage />
+            </View>
+        </TapsContextProvider>
     );
 }
