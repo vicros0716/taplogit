@@ -41,6 +41,7 @@ export class ItsRepository {
             'SELECT * FROM its_latest_tap WHERE ? = TRUE OR deleted_at IS NULL',
             includeDeleted,
         );
+        console.log(result);
         console.debug('Got all its');
         return result.map(convert);
     }
@@ -48,12 +49,10 @@ export class ItsRepository {
     async createIt(name: string, type: ItType, coalesceBy: ManipulateType) {
         console.debug(`Creating new ${type} it ${name}`);
         const result = await this.db.runAsync(
-            'INSERT INTO its (name, type, coalesce_by) VALUES ($name, $type, $coalesceBy)',
-            {
-                name,
-                type,
-                coalesceBy,
-            },
+            'INSERT INTO its (name, type, coalesce_by) VALUES (?, ?, ?)',
+            name,
+            type,
+            coalesceBy,
         );
         console.debug(`Created new ${type} it ${name}; id: ${result.lastInsertRowId}`);
         return result;
@@ -62,13 +61,11 @@ export class ItsRepository {
     async updateIt(id: number, name: string, type: ItType, coalesceBy: ManipulateType) {
         console.debug(`Updating ${type} it ${name}`);
         const result = await this.db.runAsync(
-            'UPDATE its SET name = $name, type = $type, coalesce_by = $coalesceBy WHERE it_id = $id',
-            {
-                id,
-                name,
-                type,
-                coalesceBy,
-            },
+            'UPDATE its SET name = ?, type = ?, coalesce_by = ? WHERE it_id = ?',
+            name,
+            type,
+            coalesceBy,
+            id,
         );
         console.debug(`Updated ${type} it ${name}; id: ${result.lastInsertRowId}`);
         return result;

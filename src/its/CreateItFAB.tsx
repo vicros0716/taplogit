@@ -1,16 +1,16 @@
 import { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { AnimatedFAB } from 'react-native-paper';
-import { ItsContext } from '@/its/ItsContext';
+import { ItDialogContext } from '@/its/ItDialogContext';
 
 export default function CreateItFAB({ extended }: { extended: boolean }) {
-    const { itsRepository, showDialog } = useContext(ItsContext);
+    const { show } = useContext(ItDialogContext);
     return (
         <AnimatedFAB
             icon="plus"
             label="Create It"
             extended={extended}
-            onPress={() => showDialog(null, (name, type, coalesceBy) => itsRepository.createIt(name, type, coalesceBy))}
+            onPress={() => show()}
             animateFrom="right"
             style={[styles.fab]}
         />

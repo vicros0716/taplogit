@@ -1,24 +1,22 @@
-import { ManipulateType } from 'dayjs';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Button, Dialog, Portal, Text, SegmentedButtons, TextInput } from 'react-native-paper';
-import { asValidCoalesceBy, asValidItType, DEFAULT_COALESCE_BY, DEFAULT_IT_TYPE, It, ItType } from '@/its/It';
+import { Button, Dialog, Portal, SegmentedButtons, Text, TextInput } from 'react-native-paper';
+import { asValidCoalesceBy, asValidItType, DEFAULT_COALESCE_BY, DEFAULT_IT_TYPE } from '@/its/It';
+import { ItDialogContext } from '@/its/ItDialogContext';
 import { ItsContext } from '@/its/ItsContext';
 
-export function EditItDialog({
-    it,
-    visible,
-    onDismiss,
-    onConfirm,
-}: {
-    it?: It | null;
-    visible: boolean;
-    onDismiss: () => void;
-    onConfirm: (name: string, type: ItType, coalesceBy: ManipulateType) => Promise<unknown>;
-}) {
+export function EditItDialog() {
+    const { it, visible, save, hide } = useContext(ItDialogContext);
     const [name, setName] = useState(it?.name ?? '');
     const [type, setType] = useState(it?.type ?? DEFAULT_IT_TYPE);
     const [coalesceBy, setCoalesceBy] = useState(it?.coalesceBy ?? DEFAULT_COALESCE_BY);
+
+    useEffect(() => {
+        setName(it?.name ?? '');
+        setType(it?.type ?? DEFAULT_IT_TYPE);
+        setCoalesceBy(it?.coalesceBy ?? DEFAULT_COALESCE_BY);
+    }, [it]);
+
     const { refreshIts } = useContext(ItsContext);
 
     // TODO(polish): Set a loading indicator after pressing Create
@@ -26,7 +24,7 @@ export function EditItDialog({
         <Portal>
             <Dialog
                 visible={visible}
-                onDismiss={onDismiss}
+                onDismiss={hide}
                 theme={{
                     colors: {
                         backdrop: 'rgba(255, 255, 255, 0.4)',
@@ -56,12 +54,12 @@ export function EditItDialog({
                     />
                 </Dialog.Content>
                 <Dialog.Actions>
-                    <Button onPress={onDismiss}>Cancel</Button>
+                    <Button onPress={hide}>Cancel</Button>
                     <Button
                         onPress={async () => {
-                            await onConfirm(name.trim(), type, coalesceBy);
+                            await save(name.trim(), type, coalesceBy);
                             await refreshIts();
-                            onDismiss();
+                            hide();
                         }}
                         mode="contained"
                         disabled={name.trim() === ''}>

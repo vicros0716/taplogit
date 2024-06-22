@@ -7,12 +7,14 @@ import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import DeleteItButton from '@/its/DeleteItButton';
 import { It } from '@/its/It';
+import { ItDialogContext } from '@/its/ItDialogContext';
 import { ItsContext } from '@/its/ItsContext';
 import RestoreItButton from '@/its/RestoreItButton';
 import useTapsRepository from '@/taps/useTapsRepository';
 
 export default function ItsList({ onScroll }: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void }) {
-    const { itsRepository, its, refreshIts, showDeleted, showDialog } = useContext(ItsContext);
+    const { its, refreshIts, showDeleted } = useContext(ItsContext);
+    const { show } = useContext(ItDialogContext);
     const [refreshing, setRefreshing] = useState(false);
     useEffect(() => {
         async function setup() {
@@ -35,14 +37,7 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
                     renderRightActions={() =>
                         it.isDeleted ? <RestoreItButton it={it} /> : <DeleteItButton it={it} />
                     }>
-                    <ItsListItem
-                        it={it}
-                        onLongPress={() =>
-                            showDialog(it, (name, type, coalesceBy) =>
-                                itsRepository.updateIt(it.id, name, type, coalesceBy),
-                            )
-                        }
-                    />
+                    <ItsListItem it={it} onLongPress={() => show(it)} />
                 </Swipeable>
             )}
             onScroll={onScroll}

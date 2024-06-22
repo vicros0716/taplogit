@@ -10,8 +10,7 @@ import ItsList from '@/its/ItsList';
 
 export default function HomeScreen() {
     const [isExtended, onScroll] = useScrollExtended();
-    const { showDeleted, setShowDeleted, dialogIt, dialogVisible, onDialogConfirm, hideDialog } =
-        useContext(ItsContext);
+    const { showDeleted, setShowDeleted } = useContext(ItsContext);
     const theme = useTheme();
     return (
         <SafeAreaView style={styles.container}>
@@ -33,13 +32,7 @@ export default function HomeScreen() {
             />
             <ItsList onScroll={onScroll} />
             <CreateItFAB extended={isExtended} />
-            <EditItDialog
-                key={dialogIt?.id}
-                it={dialogIt}
-                visible={dialogVisible}
-                onDismiss={hideDialog}
-                onConfirm={onDialogConfirm}
-            />
+            <EditItDialog />
         </SafeAreaView>
     );
 }
