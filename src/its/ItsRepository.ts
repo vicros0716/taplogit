@@ -1,6 +1,6 @@
 import dayjs, { ManipulateType } from 'dayjs';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { asValidCoalesceBy, asValidItType, It, ItType } from '@/its/It';
+import { asValidCoalesceBy, asValidItType, asValidView, It, ItType, ViewType } from '@/its/It';
 
 type DbIt = {
     it_id: number;
@@ -9,17 +9,19 @@ type DbIt = {
     name: string;
     type: string;
     coalesce_by: string;
+    view: string;
     latest_tapped_at: number | null;
     num_taps: number;
 };
 
-function convert({ it_id, name, deleted_at, type, coalesce_by, latest_tapped_at, num_taps }: DbIt): It {
+function convert({ it_id, name, deleted_at, type, coalesce_by, view, latest_tapped_at, num_taps }: DbIt): It {
     return {
         id: it_id,
         name,
         isDeleted: deleted_at !== null,
         type: asValidItType(type),
         coalesceBy: asValidCoalesceBy(coalesce_by),
+        view: asValidView(view),
         latestTap: latest_tapped_at ? dayjs.unix(latest_tapped_at) : null,
         numberOfTaps: num_taps,
     };
@@ -43,7 +45,6 @@ export class ItsRepository {
             'SELECT * FROM its_enriched WHERE ? = TRUE OR deleted_at IS NULL',
             includeDeleted,
         );
-        console.log(result);
         console.debug('Got all its');
         return result.map(convert);
     }
@@ -85,6 +86,13 @@ export class ItsRepository {
         console.debug(`Restoring it ${id}`);
         const result = await this.db.runAsync('UPDATE its SET deleted_at = NULL WHERE it_id = ?', id);
         console.debug(`Restored it ${id}`);
+        return result;
+    }
+
+    async setView(id: number, view: ViewType) {
+        console.debug(`Setting view ${view} for it ${id}`);
+        const result = await this.db.runAsync('UPDATE its SET view = ? WHERE it_id = ?', view, id);
+        console.debug(`Set view ${view} for it ${id}`);
         return result;
     }
 

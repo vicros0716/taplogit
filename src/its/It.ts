@@ -14,12 +14,21 @@ export function asValidCoalesceBy(coalesceBy: string): ManipulateType {
     return ['week', 'day', 'hour'].includes(coalesceBy) ? (coalesceBy as ManipulateType) : DEFAULT_COALESCE_BY;
 }
 
+export const VIEWS = ['list', 'chart', 'intervals'] as const;
+export const DEFAULT_VIEW = VIEWS[0];
+export type ViewType = (typeof VIEWS)[number];
+
+export function asValidView(view: string): ViewType {
+    return VIEWS.includes(view as ViewType) ? (view as ViewType) : DEFAULT_VIEW;
+}
+
 export type It = {
     id: number;
     name: string;
     isDeleted: boolean;
     type: ItType;
     coalesceBy: ManipulateType;
+    view: ViewType;
     latestTap: Dayjs | null;
     numberOfTaps: number;
 };

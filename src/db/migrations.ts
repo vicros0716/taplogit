@@ -10,7 +10,8 @@ const MIGRATIONS: string[] = [
             deleted_at  INTEGER,
             name        TEXT                                                NOT NULL,
             type        TEXT CHECK (type IN ('tap', 'switch'))              NOT NULL DEFAULT 'tap',
-            coalesce_by TEXT CHECK (coalesce_by IN ('week', 'day', 'hour')) NOT NULL DEFAULT 'day'
+            coalesce_by TEXT CHECK (coalesce_by IN ('week', 'day', 'hour')) NOT NULL DEFAULT 'day',
+            view        TEXT CHECK (view IN ('list', 'chart', 'intervals')) NOT NULL DEFAULT 'list'
         );
 
         CREATE TABLE taps
@@ -22,13 +23,14 @@ const MIGRATIONS: string[] = [
         CREATE INDEX taps_its_index ON taps (it_id);
 
         CREATE VIEW its_enriched
-                    (it_id, created_at, deleted_at, name, type, coalesce_by, latest_tapped_at, num_taps) AS
+                    (it_id, created_at, deleted_at, name, type, coalesce_by, view, latest_tapped_at, num_taps) AS
         SELECT its.it_id,
                its.created_at,
                its.deleted_at,
                its.name,
                its.type,
                its.coalesce_by,
+               its.view,
                MAX(taps.tapped_at),
                COUNT(*)
         FROM its

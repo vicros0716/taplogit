@@ -1,19 +1,36 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { View } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
+import { ViewType } from '@/its/It';
 import { ItDialogContext } from '@/its/ItDialogContext';
 import { ItsContext } from '@/its/ItsContext';
 import TapsPage from '@/taps/TapsPage';
 import { assertedNonNull } from '@/util/assert';
 
 export default function ItDetailsScreen() {
-    const [showChart, setShowChart] = useState(true);
     const { id } = useLocalSearchParams();
-    const { its } = useContext(ItsContext);
+    const { itsRepository, its, refreshIts } = useContext(ItsContext);
     const { show } = useContext(ItDialogContext);
     const it = assertedNonNull(its.find((it) => it.id.toString() === id));
     const theme = useTheme();
+    const icons: { [view in ViewType]: string } = {
+        list: 'view-list',
+        chart: 'chart-bar',
+        intervals: 'chart-timeline',
+    };
+    let nextView: ViewType;
+    if (it.view === 'list') {
+        nextView = 'chart';
+    } else if (it.view === 'chart') {
+        if (it.type === 'tap') {
+            nextView = 'list';
+        } else if (it.type === 'switch') {
+            nextView = 'intervals';
+        }
+    } else if (it.view === 'intervals') {
+        nextView = 'list';
+    }
 
     return (
         <View>
@@ -29,14 +46,17 @@ export default function ItDetailsScreen() {
                             />
                             <IconButton
                                 iconColor={theme.colors.onPrimary}
-                                icon={showChart ? 'view-list' : 'chart-line'}
-                                onPress={() => setShowChart(!showChart)}
+                                icon={icons[nextView]}
+                                onPress={async () => {
+                                    await itsRepository.setView(it.id, nextView);
+                                    await refreshIts();
+                                }}
                             />
                         </>
                     ),
                 }}
             />
-            <TapsPage mode={showChart ? 'chart' : 'list'} it={it} />
+            <TapsPage it={it} />
         </View>
     );
 }
