@@ -24,7 +24,8 @@ export function TapsFlatList({ it, taps }: { it: It; taps: Tap[] }) {
                         return (
                             <Text>
                                 {startTap.tappedAt.format('MMM D, YYYY @ hh:mm A')} -{' '}
-                                {endTap.tappedAt.format('MMM D, YYYY @ hh:mm A')}: {durationMinute} minutes
+                                {endTap.id < 0 ? 'Now' : endTap.tappedAt.format('MMM D, YYYY @ hh:mm A')}:{' '}
+                                {durationMinute} minutes
                             </Text>
                         );
                     }}
