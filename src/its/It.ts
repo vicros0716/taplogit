@@ -9,6 +9,7 @@ export function asValidItType(type: string): ItType {
 }
 
 export const DEFAULT_COALESCE_BY: ManipulateType = 'day';
+
 export function asValidCoalesceBy(coalesceBy: string): ManipulateType {
     return ['week', 'day', 'hour'].includes(coalesceBy) ? (coalesceBy as ManipulateType) : DEFAULT_COALESCE_BY;
 }
@@ -20,4 +21,5 @@ export type It = {
     type: ItType;
     coalesceBy: ManipulateType;
     latestTap: Dayjs | null;
+    numberOfTaps: number;
 };

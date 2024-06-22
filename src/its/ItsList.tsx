@@ -37,7 +37,7 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
                     renderRightActions={() =>
                         it.isDeleted ? <RestoreItButton it={it} /> : <DeleteItButton it={it} />
                     }>
-                    <ItsListItem it={it} onLongPress={() => show(it)} />
+                    <ItsListItem it={it} onPress={refreshIts} onLongPress={() => show(it)} />
                 </Swipeable>
             )}
             onScroll={onScroll}
@@ -52,7 +52,7 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
     );
 }
 
-function ItsListItem({ it, onLongPress }: { it: It; onLongPress: () => void }) {
+function ItsListItem({ it, onPress, onLongPress }: { it: It; onPress: () => void; onLongPress: () => void }) {
     const [isSnackbarVisible, setSnackbarVisible] = useState(false);
     const theme = useTheme();
     const tapsRepository = useTapsRepository();
@@ -71,6 +71,7 @@ function ItsListItem({ it, onLongPress }: { it: It; onLongPress: () => void }) {
                 onPress={async () => {
                     await tapsRepository.createTap(it);
                     setSnackbarVisible(true);
+                    onPress();
                 }}
             />
             <Portal>
@@ -89,7 +90,14 @@ function ItsListItemAction({ it, onPress }: { it: It; onPress: () => Promise<voi
         case 'tap':
             return <IconButton icon="gesture-tap" iconColor={theme.colors.onSurface} onPress={onPress} />;
         case 'switch':
-            return <IconButton icon="toggle-switch-outline" iconColor={theme.colors.onSurface} onPress={onPress} />;
+            const switchOpen = it.numberOfTaps % 2 === 0;
+            return (
+                <IconButton
+                    icon={switchOpen ? 'toggle-switch-off-outline' : 'toggle-switch-outline'}
+                    iconColor={theme.colors.onSurface}
+                    onPress={onPress}
+                />
+            );
     }
 }
 

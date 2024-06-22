@@ -15,7 +15,6 @@ export function TapsFlatList({ it, taps }: { it: It; taps: Tap[] }) {
             );
         case 'switch':
             const tapPairs = aggregateAsSwitch(taps);
-            console.log(tapPairs);
             return (
                 <FlatList
                     data={tapPairs}

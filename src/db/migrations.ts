@@ -21,15 +21,16 @@ const MIGRATIONS: string[] = [
         );
         CREATE INDEX taps_its_index ON taps (it_id);
 
-        CREATE VIEW its_latest_tap
-                    (it_id, created_at, deleted_at, name, type, coalesce_by, latest_tapped_at) AS
+        CREATE VIEW its_enriched
+                    (it_id, created_at, deleted_at, name, type, coalesce_by, latest_tapped_at, num_taps) AS
         SELECT its.it_id,
                its.created_at,
                its.deleted_at,
                its.name,
                its.type,
                its.coalesce_by,
-               MAX(taps.tapped_at)
+               MAX(taps.tapped_at),
+               COUNT(*)
         FROM its
                  LEFT JOIN taps USING (it_id)
         GROUP BY its.it_id;
