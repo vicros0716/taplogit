@@ -1,10 +1,11 @@
 import { ManipulateType } from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ActivityIndicator, SegmentedButtons } from 'react-native-paper';
+import { ActivityIndicator, SegmentedButtons, Switch, Text } from 'react-native-paper';
 import { asValidCoalesceBy, DEFAULT_COALESCE_BY, It } from '@/its/It';
 import useItsRepository from '@/its/useItsRepository';
 import { Tap } from '@/taps/Tap';
+import { TapsFlatList } from '@/taps/TapsFlatList';
 import TapsGraph from '@/taps/TapsGraph';
 import TapsList from '@/taps/TapsList';
 import useTapsRepository from '@/taps/useTapsRepository';
@@ -31,6 +32,8 @@ export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It 
     }, []);
 
     const [coalesceBy, setCoalesceBy] = useState(DEFAULT_COALESCE_BY);
+    const [coalesce, setCoalesce] = useState(false);
+
     return (
         <View>
             <SegmentedButtons
@@ -51,7 +54,15 @@ export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It 
             {mode === 'chart' ? (
                 <TapsGraph taps={taps} type={it.type} coalesceBy={coalesceBy} />
             ) : mode === 'list' ? (
-                <TapsList taps={taps} type={it.type} refreshTaps={refreshTaps} coalesceBy={coalesceBy} />
+                <>
+                    <Text>Should Coalesce? </Text>
+                    <Switch value={coalesce} onValueChange={setCoalesce} />
+                    {coalesce ? (
+                        <TapsList taps={taps} type={it.type} refreshTaps={refreshTaps} coalesceBy={coalesceBy} />
+                    ) : (
+                        <TapsFlatList taps={taps} type={it.type} />
+                    )}
+                </>
             ) : null}
         </View>
     );

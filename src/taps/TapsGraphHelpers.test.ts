@@ -66,7 +66,7 @@ describe('aggregateAsTaps', () => {
                 [dayjs('2024-06-01T07:00:00.000Z').unix().toString()]: 6,
             },
         },
-    ])('properly aggregates when coalesced by $coalescedBy', ({ coalescedBy, expected }) => {
+    ])('coalesces taps by $coalescedBy', ({ coalescedBy, expected }) => {
         const data = aggregateAsTaps(taps, coalescedBy);
         expect(data).toEqual(expected);
     });
@@ -102,7 +102,7 @@ describe('aggregateAsSwitch', () => {
                 [dayjs('2024-06-01T07:00:00.000Z').unix().toString()]: 3466,
             },
         },
-    ])('properly aggregates when coalesced by $coalescedBy', ({ coalescedBy, expected }) => {
+    ])('coalesces switch durations by $coalescedBy', ({ coalescedBy, expected }) => {
         const data = aggregateAsSwitch(taps, coalescedBy);
         expect(data).toEqual(expected);
     });

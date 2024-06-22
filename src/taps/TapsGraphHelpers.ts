@@ -3,7 +3,7 @@ import { Tap } from '@/taps/Tap';
 
 export function aggregateAsTaps(taps: Tap[], coalesceBy: ManipulateType) {
     return taps
-        .map((tap) => tap.tappedAt.tz().startOf(coalesceBy).unix().toString())
+        .map((tap) => tap.tappedAt.startOf(coalesceBy).unix().toString())
         .reduce<{ [timestampString: string]: number }>(
             (acc, tappedAtTimestampString) => ({
                 ...acc,
@@ -15,7 +15,7 @@ export function aggregateAsTaps(taps: Tap[], coalesceBy: ManipulateType) {
 
 export function aggregateAsSwitch(taps: Tap[], coalesceBy: ManipulateType) {
     return taps
-        .map((tap) => tap.tappedAt.tz())
+        .map((tap) => tap.tappedAt)
         .reduce<[Dayjs, Dayjs][]>((acc, tappedAt, currentIndex) => {
             if (currentIndex % 2 === 0) {
                 const lastTappedAt = currentIndex + 1 === taps.length;
