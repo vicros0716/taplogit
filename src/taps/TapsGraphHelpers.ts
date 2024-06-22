@@ -14,7 +14,8 @@ export function aggregateAsTaps(taps: Tap[], coalesceBy: ManipulateType) {
 }
 
 export function aggregateAsSwitch(taps: Tap[], coalesceBy: ManipulateType) {
-    return taps
+    return [...taps]
+        .sort((a, b) => a.id - b.id)
         .map((tap) => tap.tappedAt)
         .reduce<[Dayjs, Dayjs][]>((acc, tappedAt, currentIndex) => {
             if (currentIndex % 2 === 0) {
