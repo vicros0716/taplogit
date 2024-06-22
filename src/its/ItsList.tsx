@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { IconButton, Portal, Snackbar, Text, useTheme } from 'react-native-paper';
 import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView';
@@ -12,7 +12,7 @@ import RestoreItButton from '@/its/RestoreItButton';
 import useTapsRepository from '@/taps/useTapsRepository';
 
 export default function ItsList({ onScroll }: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void }) {
-    const { its, refreshIts, showDeleted } = useContext(ItsContext);
+    const { itsRepository, its, refreshIts, showDeleted, showDialog } = useContext(ItsContext);
     const [refreshing, setRefreshing] = useState(false);
     useEffect(() => {
         async function setup() {
@@ -28,14 +28,17 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
     return (
         <FlatList
             data={its}
-            renderItem={({ item }) => (
+            renderItem={({ item: it }) => (
                 <Swipeable
                     overshootLeft={false}
                     overshootRight={false}
                     renderRightActions={() =>
-                        item.isDeleted ? <RestoreItButton it={item} /> : <DeleteItButton it={item} />
+                        it.isDeleted ? <RestoreItButton it={it} /> : <DeleteItButton it={it} />
                     }>
-                    <ItsListItem it={item} />
+                    <ItsListItem
+                        it={it}
+                        onLongPress={() => showDialog(it, (name, type) => itsRepository.updateIt(it.id, name, type))}
+                    />
                 </Swipeable>
             )}
             onScroll={onScroll}
@@ -50,17 +53,19 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
     );
 }
 
-function ItsListItem({ it }: { it: It }) {
+function ItsListItem({ it, onLongPress }: { it: It; onLongPress: () => void }) {
     const [isSnackbarVisible, setSnackbarVisible] = useState(false);
     const theme = useTheme();
     const tapsRepository = useTapsRepository();
 
     return (
         <View style={styles.container}>
-            <Link href={`/details/${it.id}`} style={{ flexGrow: 1 }}>
-                <Text variant="titleLarge" style={{ color: theme.colors.onSurface }}>
-                    {it.name}
-                </Text>
+            <Link href={`/details/${it.id}`} style={{ flexGrow: 1 }} asChild>
+                <Pressable onLongPress={onLongPress}>
+                    <Text variant="titleLarge" style={{ color: theme.colors.onSurface }}>
+                        {it.name}
+                    </Text>
+                </Pressable>
             </Link>
             <ItsListItemAction
                 it={it}

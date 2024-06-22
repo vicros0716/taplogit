@@ -52,6 +52,13 @@ export class ItsRepository {
         return result;
     }
 
+    async updateIt(id: number, name: string, type: ItType) {
+        console.debug(`Updating ${type} it ${name}`);
+        const result = await this.db.runAsync('UPDATE its SET name = ?, type = ? WHERE it_id = ?', name, type, id);
+        console.debug(`Updated ${type} it ${name}; id: ${result.lastInsertRowId}`);
+        return result;
+    }
+
     async deleteIt(id: number) {
         console.debug(`Deleting it ${id}`);
         const deletedAt = dayjs().unix();
