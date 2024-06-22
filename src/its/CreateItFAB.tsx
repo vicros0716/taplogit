@@ -10,7 +10,7 @@ export default function CreateItFAB({ extended }: { extended: boolean }) {
             icon="plus"
             label="Create It"
             extended={extended}
-            onPress={() => showDialog(null, (name, type) => itsRepository.createIt(name, type))}
+            onPress={() => showDialog(null, (name, type, coalesceBy) => itsRepository.createIt(name, type, coalesceBy))}
             animateFrom="right"
             style={[styles.fab]}
         />

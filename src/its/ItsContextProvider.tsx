@@ -1,3 +1,4 @@
+import { ManipulateType } from 'dayjs';
 import { PropsWithChildren, useState } from 'react';
 import { It, ItType } from '@/its/It';
 import { ItsContext } from '@/its/ItsContext';
@@ -9,9 +10,9 @@ export default function ItsContextProvider(props: PropsWithChildren<{}>) {
     const itsRepository = useItsRepository();
     const [dialogIt, setDialogIt] = useState<It | null>(null);
     const [dialogVisible, setDialogVisible] = useState(false);
-    const [onDialogConfirm, setOnDialogConfirm] = useState<(name: string, type: ItType) => Promise<unknown>>(
-        async () => {},
-    );
+    const [onDialogConfirm, setOnDialogConfirm] = useState<
+        (name: string, type: ItType, coalesceBy: ManipulateType) => Promise<unknown>
+    >(async () => {});
 
     return (
         <ItsContext.Provider
@@ -26,7 +27,10 @@ export default function ItsContextProvider(props: PropsWithChildren<{}>) {
                 dialogIt,
                 dialogVisible,
                 onDialogConfirm,
-                showDialog: (it: It | null, onConfirm?: (name: string, type: ItType) => Promise<unknown>) => {
+                showDialog: (
+                    it: It | null,
+                    onConfirm?: (name: string, type: ItType, coalesceBy: ManipulateType) => Promise<unknown>,
+                ) => {
                     setDialogIt(it);
                     setDialogVisible(true);
                     setOnDialogConfirm(() => onConfirm ?? (async () => {}));

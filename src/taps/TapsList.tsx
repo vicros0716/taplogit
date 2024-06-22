@@ -1,32 +1,21 @@
-import dayjs, { ManipulateType } from 'dayjs';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { SectionList, StyleSheet, View } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { IconButton, Text } from 'react-native-paper';
-import { ItType } from '@/its/It';
+import { It } from '@/its/It';
 import { Tap } from '@/taps/Tap';
 import { aggregateAsTaps } from '@/taps/TapsListHelpers';
 import useTapsRepository from '@/taps/useTapsRepository';
 
-export default function TapsList({
-    taps,
-    refreshTaps,
-    type,
-    coalesceBy,
-}: {
-    taps: Tap[];
-    refreshTaps: () => Promise<void>;
-    type: ItType;
-    coalesceBy: ManipulateType;
-}) {
+export default function TapsList({ it, taps, refreshTaps }: { it: It; taps: Tap[]; refreshTaps: () => Promise<void> }) {
     const tapsRepository = useTapsRepository();
     const [refreshing, setRefreshing] = useState(false);
-
-    const coalescedTaps = aggregateAsTaps(taps, coalesceBy);
+    const coalescedTaps = aggregateAsTaps(taps, it.coalesceBy);
     const data = Object.entries(coalescedTaps).map(([tappedAtISOString, taps]) => {
         const coalescedTappedAt = dayjs(tappedAtISOString);
         let title = coalescedTappedAt.format('MMM D, YYYY');
-        switch (coalesceBy) {
+        switch (it.coalesceBy) {
             case 'week':
                 title = `Week of ${title}`;
                 break;

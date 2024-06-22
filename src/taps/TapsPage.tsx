@@ -1,9 +1,7 @@
-import { ManipulateType } from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ActivityIndicator, SegmentedButtons, Switch, Text } from 'react-native-paper';
-import { asValidCoalesceBy, DEFAULT_COALESCE_BY, It } from '@/its/It';
-import useItsRepository from '@/its/useItsRepository';
+import { ActivityIndicator, Switch, Text } from 'react-native-paper';
+import { It } from '@/its/It';
 import { Tap } from '@/taps/Tap';
 import { TapsFlatList } from '@/taps/TapsFlatList';
 import TapsGraph from '@/taps/TapsGraph';
@@ -13,7 +11,6 @@ import useTapsRepository from '@/taps/useTapsRepository';
 export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It }) {
     const [taps, setTaps] = useState<Tap[]>([]);
 
-    const itsRepository = useItsRepository();
     const tapsRepository = useTapsRepository();
     const [refreshing, setRefreshing] = useState(false);
     const refreshTaps = useCallback(async () => {
@@ -31,45 +28,24 @@ export default function TapsPage({ mode, it }: { mode: 'chart' | 'list'; it: It 
         setup();
     }, []);
 
-    const [coalesceBy, setCoalesceBy] = useState(DEFAULT_COALESCE_BY);
     const [coalesce, setCoalesce] = useState(false);
 
     return (
         <View>
-            <SegmentedButtons
-                buttons={[
-                    { value: 'week', label: 'Week' },
-                    { value: 'day', label: 'Day' },
-                    { value: 'hour', label: 'Hour' },
-                ]}
-                value={coalesceBy}
-                onValueChange={async (value) => {
-                    const coalesceBy: ManipulateType = asValidCoalesceBy(value);
-                    await itsRepository.setCoalesceBy(it.id, coalesceBy);
-                    setCoalesceBy(coalesceBy);
-                }}
-                style={styles.unitsOfTime}
-            />
             {refreshing && <ActivityIndicator animating />}
             {mode === 'chart' ? (
-                <TapsGraph taps={taps} type={it.type} coalesceBy={coalesceBy} />
+                <TapsGraph it={it} taps={taps} />
             ) : mode === 'list' ? (
                 <>
                     <Text>Should Coalesce? </Text>
                     <Switch value={coalesce} onValueChange={setCoalesce} />
                     {coalesce ? (
-                        <TapsList taps={taps} type={it.type} refreshTaps={refreshTaps} coalesceBy={coalesceBy} />
+                        <TapsList it={it} taps={taps} refreshTaps={refreshTaps} />
                     ) : (
-                        <TapsFlatList taps={taps} type={it.type} />
+                        <TapsFlatList it={it} taps={taps} />
                     )}
                 </>
             ) : null}
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    unitsOfTime: {
-        margin: 12,
-    },
-});

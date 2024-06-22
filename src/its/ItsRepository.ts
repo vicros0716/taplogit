@@ -45,16 +45,31 @@ export class ItsRepository {
         return result.map(convert);
     }
 
-    async createIt(name: string, type: ItType) {
+    async createIt(name: string, type: ItType, coalesceBy: ManipulateType) {
         console.debug(`Creating new ${type} it ${name}`);
-        const result = await this.db.runAsync('INSERT INTO its (name, type) VALUES (?, ?)', name, type);
+        const result = await this.db.runAsync(
+            'INSERT INTO its (name, type, coalesce_by) VALUES ($name, $type, $coalesceBy)',
+            {
+                name,
+                type,
+                coalesceBy,
+            },
+        );
         console.debug(`Created new ${type} it ${name}; id: ${result.lastInsertRowId}`);
         return result;
     }
 
-    async updateIt(id: number, name: string, type: ItType) {
+    async updateIt(id: number, name: string, type: ItType, coalesceBy: ManipulateType) {
         console.debug(`Updating ${type} it ${name}`);
-        const result = await this.db.runAsync('UPDATE its SET name = ?, type = ? WHERE it_id = ?', name, type, id);
+        const result = await this.db.runAsync(
+            'UPDATE its SET name = $name, type = $type, coalesce_by = $coalesceBy WHERE it_id = $id',
+            {
+                id,
+                name,
+                type,
+                coalesceBy,
+            },
+        );
         console.debug(`Updated ${type} it ${name}; id: ${result.lastInsertRowId}`);
         return result;
     }
@@ -71,13 +86,6 @@ export class ItsRepository {
         console.debug(`Restoring it ${id}`);
         const result = await this.db.runAsync('UPDATE its SET deleted_at = NULL WHERE it_id = ?', id);
         console.debug(`Restored it ${id}`);
-        return result;
-    }
-
-    async setCoalesceBy(id: number, coalesceBy: ManipulateType) {
-        console.debug(`Setting coalesce by ${coalesceBy} for it ${id}`);
-        const result = await this.db.runAsync('UPDATE its SET coalesce_by = ? WHERE it_id = ?', coalesceBy, id);
-        console.debug(`Set coalesce by ${coalesceBy} for it ${id}`);
         return result;
     }
 

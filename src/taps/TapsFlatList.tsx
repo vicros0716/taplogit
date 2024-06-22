@@ -1,11 +1,11 @@
 import { FlatList } from 'react-native';
 import { Text } from 'react-native-paper';
-import { ItType } from '@/its/It';
+import { It } from '@/its/It';
 import { Tap } from '@/taps/Tap';
 import { aggregateAsSwitch } from '@/taps/TapsListHelpers';
 
-export function TapsFlatList({ taps, type }: { taps: Tap[]; type: ItType }) {
-    switch (type) {
+export function TapsFlatList({ it, taps }: { it: It; taps: Tap[] }) {
+    switch (it.type) {
         case 'tap':
             return (
                 <FlatList

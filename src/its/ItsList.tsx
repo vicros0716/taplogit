@@ -37,7 +37,11 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
                     }>
                     <ItsListItem
                         it={it}
-                        onLongPress={() => showDialog(it, (name, type) => itsRepository.updateIt(it.id, name, type))}
+                        onLongPress={() =>
+                            showDialog(it, (name, type, coalesceBy) =>
+                                itsRepository.updateIt(it.id, name, type, coalesceBy),
+                            )
+                        }
                     />
                 </Swipeable>
             )}
