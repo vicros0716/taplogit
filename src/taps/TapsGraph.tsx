@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
-import { useContext } from 'react';
 import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
-import { TapsContext } from '@/taps/TapsContext';
+import { useTaps, useTapsIt } from '@/taps/TapsContext';
 import { aggregateAsSwitch, aggregateAsTaps } from '@/taps/TapsGraphHelpers';
 
 export default function TapsGraph() {
-    const { it, taps } = useContext(TapsContext);
+    const it = useTapsIt();
+    const taps = useTaps();
     const theme = useTheme();
     const aggregate = it.type === 'tap' ? aggregateAsTaps : aggregateAsSwitch;
     const aggregatedTaps = aggregate(taps, it.coalesceBy);

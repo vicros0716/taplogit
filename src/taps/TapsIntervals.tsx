@@ -1,11 +1,10 @@
-import { useContext } from 'react';
 import { FlatList } from 'react-native';
 import { Text } from 'react-native-paper';
-import { TapsContext } from '@/taps/TapsContext';
+import { useTaps } from '@/taps/TapsContext';
 import { aggregateAsSwitch } from '@/taps/TapsListHelpers';
 
 export function TapsIntervals() {
-    const { taps } = useContext(TapsContext);
+    const taps = useTaps();
     const tapPairs = aggregateAsSwitch(taps);
     return (
         <FlatList

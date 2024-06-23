@@ -1,15 +1,16 @@
 import dayjs from 'dayjs';
-import { useContext, useState } from 'react';
 import { SectionList, StyleSheet, View } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { IconButton, Text } from 'react-native-paper';
 import { Tap } from '@/taps/Tap';
-import { TapsContext } from '@/taps/TapsContext';
+import { useTapDelete, useTaps, useTapsIt, useTapsRefresh } from '@/taps/TapsContext';
 import { aggregateAsTaps } from '@/taps/TapsListHelpers';
 
 export default function TapsList() {
-    const { tapsRepository, it, taps, refreshTaps } = useContext(TapsContext);
-    const [refreshing, setRefreshing] = useState(false);
+    const it = useTapsIt();
+    const taps = useTaps();
+    const [refreshing, refresh] = useTapsRefresh();
+    const deleteTap = useTapDelete();
     const coalescedTaps = aggregateAsTaps(taps, it.coalesceBy);
     const data = Object.entries(coalescedTaps).map(([tappedAtISOString, taps]) => {
         const coalescedTappedAt = dayjs(tappedAtISOString);
@@ -30,34 +31,21 @@ export default function TapsList() {
     return (
         <SectionList
             sections={data}
-            renderItem={({ item }) => (
+            renderItem={({ item: tap }) => (
                 <Swipeable
                     overshootLeft={false}
                     overshootRight={false}
                     renderRightActions={() => (
                         <RectButton style={{ backgroundColor: '#AB3717' }}>
-                            <IconButton
-                                icon="delete"
-                                iconColor="white"
-                                onPress={async () => {
-                                    setRefreshing(true);
-                                    await tapsRepository.deleteTap(item.id);
-                                    await refreshTaps();
-                                    setRefreshing(false);
-                                }}
-                            />
+                            <IconButton icon="delete" iconColor="white" onPress={() => deleteTap(tap)} />
                         </RectButton>
                     )}>
-                    <TapsListItem tap={item} />
+                    <TapsListItem tap={tap} />
                 </Swipeable>
             )}
             renderSectionHeader={({ section: { title } }) => <TapsListSectionHeader title={title} />}
             refreshing={refreshing}
-            onRefresh={async () => {
-                setRefreshing(true);
-                await refreshTaps();
-                setRefreshing(false);
-            }}
+            onRefresh={refresh}
         />
     );
 }

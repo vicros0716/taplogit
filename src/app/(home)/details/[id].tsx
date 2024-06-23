@@ -5,7 +5,7 @@ import { useDialogVisible } from '@/its/DialogContext';
 import { ViewType } from '@/its/It';
 import { useIts, useRefreshIts } from '@/its/ItsContext';
 import useItsRepository from '@/its/useItsRepository';
-import TapsContextProvider from '@/taps/TapsContextProvider';
+import TapsContextProvider from '@/taps/TapsContext';
 import TapsPage from '@/taps/TapsPage';
 import { assertedNonNull } from '@/util/assert';
 
