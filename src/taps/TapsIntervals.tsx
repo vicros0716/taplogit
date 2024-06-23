@@ -2,17 +2,20 @@ import dayjs from 'dayjs';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { Tap } from '@/taps/Tap';
-import { useTaps } from '@/taps/TapsContext';
+import { useTaps, useTapsRefresh } from '@/taps/TapsContext';
 import { aggregateAsSwitch } from '@/taps/TapsListHelpers';
 
 export function TapsIntervals() {
     const theme = useTheme();
+    const [refreshing, refresh] = useTapsRefresh();
     const taps = useTaps();
     const tapPairs = aggregateAsSwitch(taps);
     return (
         <FlatList
             data={tapPairs}
             renderItem={({ item: [startTap, endTap] }) => <TapsIntervalsItem startTap={startTap} endTap={endTap} />}
+            refreshing={refreshing}
+            onRefresh={refresh}
             style={{ backgroundColor: theme.colors.surface }}
         />
     );

@@ -1,5 +1,5 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
 import { useDialogVisible } from '@/its/DialogContext';
 import { ViewType } from '@/its/It';
@@ -37,7 +37,7 @@ export default function ItDetailsScreen() {
 
     return (
         <TapsContextProvider it={it}>
-            <View>
+            <SafeAreaView style={styles.container}>
                 <Stack.Screen
                     options={{
                         title: it.name,
@@ -61,7 +61,13 @@ export default function ItDetailsScreen() {
                     }}
                 />
                 <TapsPage />
-            </View>
+            </SafeAreaView>
         </TapsContextProvider>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+});
