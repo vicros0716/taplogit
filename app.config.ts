@@ -13,19 +13,15 @@ function environmentSpecific(production: string, preview: string, development: s
 }
 
 const widgetConfig: WithAndroidWidgetsParams = {
-    fonts: [
-        './assets/fonts/material-symbols/outlined/MaterialSymbolsOutlined.ttf',
-        './assets/fonts/material-symbols/rounded/MaterialSymbolsRounded.ttf',
-        './assets/fonts/material-symbols/sharp/MaterialSymbolsSharp.ttf',
-    ],
     widgets: [
         {
             name: 'TapWidgIt',
             label: 'Tap WidgIt',
             minWidth: '180dp',
-            minHeight: '60dp',
+            minHeight: '40dp',
+            resizeMode: 'horizontal|vertical',
             targetCellWidth: 3,
-            targetCellHeight: 1,
+            targetCellHeight: 0,
             description: 'Tap WidgIt',
             previewImage: './assets/widget-preview/tapwidgit.png',
             widgetFeatures: 'reconfigurable',

@@ -1,7 +1,9 @@
 import { SQLiteProvider } from 'expo-sqlite';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, useColorScheme, View } from 'react-native';
 import { WidgetConfigurationScreenProps } from 'react-native-android-widget';
 import { Button, PaperProvider, Text } from 'react-native-paper';
+import { darkTheme } from '@/constants/darkTheme';
+import { lightTheme } from '@/constants/lightTheme';
 import { DATABASE_NAME } from '@/db/constants';
 import { initializeDb } from '@/db/initializeDb';
 import { ItsProvider, useIts } from '@/its/ItsContext';
@@ -9,9 +11,10 @@ import TapWidgIt from '@/widgets/TapWidgIt';
 import useWidgetsRepository from '@/widgets/useWidgetsRepository';
 
 export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps) {
+    const colorScheme = useColorScheme();
     return (
         <SQLiteProvider databaseName={DATABASE_NAME} onInit={initializeDb}>
-            <PaperProvider>
+            <PaperProvider theme={colorScheme === 'dark' ? darkTheme : lightTheme}>
                 <ItsProvider>
                     <ProvidedWidgetConfigurationScreen {...props} />
                 </ItsProvider>
