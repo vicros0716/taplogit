@@ -1,4 +1,5 @@
 import { ConfigContext, ExpoConfig } from '@expo/config';
+import { WithAndroidWidgetsParams } from 'react-native-android-widget';
 
 function environmentSpecific(production: string, preview: string, development: string) {
     switch (process.env.ENVIRONMENT) {
@@ -10,6 +11,27 @@ function environmentSpecific(production: string, preview: string, development: s
             return production;
     }
 }
+
+const widgetConfig: WithAndroidWidgetsParams = {
+    fonts: [
+        './assets/fonts/material-symbols/outlined/MaterialSymbolsOutlined.ttf',
+        './assets/fonts/material-symbols/rounded/MaterialSymbolsRounded.ttf',
+        './assets/fonts/material-symbols/sharp/MaterialSymbolsSharp.ttf',
+    ],
+    widgets: [
+        {
+            name: 'TapWidgIt',
+            label: 'Tap WidgIt',
+            minWidth: '180dp',
+            minHeight: '120dp',
+            targetCellWidth: 3,
+            targetCellHeight: 2,
+            description: 'Tap WidgIt',
+            previewImage: './assets/widget-preview/tapwidgit.png',
+            widgetFeatures: 'reconfigurable',
+        },
+    ],
+};
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config,
@@ -42,7 +64,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         output: 'static',
         favicon: './assets/images/favicon.png',
     },
-    plugins: ['expo-router'],
+    plugins: ['expo-router', ['react-native-android-widget', widgetConfig]],
     experiments: {
         typedRoutes: true,
     },
