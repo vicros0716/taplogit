@@ -16,11 +16,12 @@ export default function HomeScreen() {
             <Stack.Screen
                 options={{
                     title: 'Tap Log It',
-                    headerLeft: () => (
-                        <Link href="/it-widget-preview">
-                            <IconButton icon="code-tags" />
-                        </Link>
-                    ),
+                    headerLeft: () =>
+                        __DEV__ ? (
+                            <Link href="/it-widget-preview">
+                                <IconButton icon="code-tags" />
+                            </Link>
+                        ) : null,
                     headerRight: () => (
                         <>
                             <Text style={{ color: theme.colors.onPrimary }}>Show Deleted</Text>
