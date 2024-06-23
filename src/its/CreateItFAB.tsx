@@ -1,10 +1,9 @@
-import { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { AnimatedFAB } from 'react-native-paper';
-import { ItDialogContext } from '@/its/ItDialogContext';
+import { useDialogVisible } from '@/its/DialogContext';
 
 export default function CreateItFAB({ extended }: { extended: boolean }) {
-    const { show } = useContext(ItDialogContext);
+    const { show } = useDialogVisible();
     return (
         <AnimatedFAB
             icon="plus"

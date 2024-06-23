@@ -1,9 +1,8 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { useContext } from 'react';
 import { View } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
+import { useDialogVisible } from '@/its/DialogContext';
 import { ViewType } from '@/its/It';
-import { ItDialogContext } from '@/its/ItDialogContext';
 import { useIts, useRefreshIts } from '@/its/ItsContext';
 import useItsRepository from '@/its/useItsRepository';
 import TapsContextProvider from '@/taps/TapsContextProvider';
@@ -15,7 +14,7 @@ export default function ItDetailsScreen() {
     const itsRepository = useItsRepository();
     const [, refreshIts] = useRefreshIts();
     const its = useIts();
-    const { show } = useContext(ItDialogContext);
+    const { show } = useDialogVisible();
     const it = assertedNonNull(its.find((it) => it.id.toString() === id));
     const theme = useTheme();
     const icons: { [view in ViewType]: string } = {

@@ -1,23 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button, Dialog, Portal, SegmentedButtons, Text, TextInput } from 'react-native-paper';
-import { asValidCoalesceBy, asValidItType, DEFAULT_COALESCE_BY, DEFAULT_IT_TYPE } from '@/its/It';
-import { ItDialogContext } from '@/its/ItDialogContext';
-import { useRefreshIts } from '@/its/ItsContext';
+import { useDialog, useDialogVisible } from '@/its/DialogContext';
 
 export function EditItDialog() {
-    const { it, visible, save, hide } = useContext(ItDialogContext);
-    const [name, setName] = useState(it?.name ?? '');
-    const [type, setType] = useState(it?.type ?? DEFAULT_IT_TYPE);
-    const [coalesceBy, setCoalesceBy] = useState(it?.coalesceBy ?? DEFAULT_COALESCE_BY);
-
-    useEffect(() => {
-        setName(it?.name ?? '');
-        setType(it?.type ?? DEFAULT_IT_TYPE);
-        setCoalesceBy(it?.coalesceBy ?? DEFAULT_COALESCE_BY);
-    }, [it]);
-
-    const [, refreshIts] = useRefreshIts();
+    const { it, name, setName, type, setType, coalesceBy, setCoalesceBy, save } = useDialog();
+    const { visible, hide } = useDialogVisible();
 
     // TODO(polish): Set a loading indicator after pressing Create
     return (
@@ -40,7 +27,7 @@ export function EditItDialog() {
                             { value: 'switch', label: 'Switch', icon: 'toggle-switch-outline' },
                         ]}
                         value={type}
-                        onValueChange={(value) => setType(asValidItType(value))}
+                        onValueChange={setType}
                     />
                     <Text>Coalesce By</Text>
                     <SegmentedButtons
@@ -50,16 +37,14 @@ export function EditItDialog() {
                             { value: 'hour', label: 'Hour' },
                         ]}
                         value={coalesceBy}
-                        onValueChange={(value) => setCoalesceBy(asValidCoalesceBy(value))}
+                        onValueChange={setCoalesceBy}
                     />
                 </Dialog.Content>
                 <Dialog.Actions>
                     <Button onPress={hide}>Cancel</Button>
                     <Button
                         onPress={async () => {
-                            await save(name.trim(), type, coalesceBy);
-                            await refreshIts();
-                            hide();
+                            await save();
                         }}
                         mode="contained"
                         disabled={name.trim() === ''}>
