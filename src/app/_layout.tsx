@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import Duration from 'dayjs/plugin/duration';
+import RelativeTime from 'dayjs/plugin/relativeTime';
 import Timezone from 'dayjs/plugin/timezone';
 import UTC from 'dayjs/plugin/utc';
 import { Stack } from 'expo-router';
@@ -21,6 +22,7 @@ import { widgetTaskHandler } from '@/widgets/widgetTaskHandler';
 dayjs.extend(UTC);
 dayjs.extend(Timezone);
 dayjs.extend(Duration);
+dayjs.extend(RelativeTime);
 
 // See https://commerce.nearform.com/open-source/victory/docs/react-native#ignoring-require-cycles
 LogBox.ignoreLogs(['Require cycle: node_modules/victory']);
