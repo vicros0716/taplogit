@@ -3,12 +3,12 @@ import { WithAndroidWidgetsParams } from 'react-native-android-widget';
 
 function environmentSpecific(production: string, preview: string, development: string) {
     switch (process.env.ENVIRONMENT) {
-        case 'development':
-            return development;
+        case 'production':
+            return production;
         case 'preview':
             return preview;
         default:
-            return production;
+            return development;
     }
 }
 
@@ -23,9 +23,9 @@ const widgetConfig: WithAndroidWidgetsParams = {
             name: 'TapWidgIt',
             label: 'Tap WidgIt',
             minWidth: '180dp',
-            minHeight: '120dp',
+            minHeight: '60dp',
             targetCellWidth: 3,
-            targetCellHeight: 2,
+            targetCellHeight: 1,
             description: 'Tap WidgIt',
             previewImage: './assets/widget-preview/tapwidgit.png',
             widgetFeatures: 'reconfigurable',
