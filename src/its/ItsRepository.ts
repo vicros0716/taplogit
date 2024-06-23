@@ -52,10 +52,11 @@ export class ItsRepository {
     async createIt(name: string, type: ItType, coalesceBy: ManipulateType) {
         console.debug(`Creating new ${type} it ${name}`);
         const result = await this.db.runAsync(
-            'INSERT INTO its (name, type, coalesce_by) VALUES (?, ?, ?)',
+            'INSERT INTO its (name, type, coalesce_by, view) VALUES (?, ?, ?, ?)',
             name,
             type,
             coalesceBy,
+            type === 'tap' ? 'list' : 'intervals',
         );
         console.debug(`Created new ${type} it ${name}; id: ${result.lastInsertRowId}`);
         return result;
