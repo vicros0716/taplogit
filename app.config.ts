@@ -35,7 +35,7 @@ const widgetConfig: WithAndroidWidgetsParams = {
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config,
-    name: `taplogit${environmentSpecific('', ' (Stg)', ' (Dev)')}`,
+    name: `taplogit${environmentSpecific('', ' (Preview)', ' (Development)')}`,
     slug: 'taplogit',
     owner: 'vicros0716',
     version: '1.0.0',
@@ -50,14 +50,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     ios: {
         supportsTablet: true,
-        bundleIdentifier: `com.taplogit${environmentSpecific('', '.stg', '.dev')}`,
+        bundleIdentifier: `com.taplogit${environmentSpecific('', '.preview', '.development')}`,
     },
     android: {
         adaptiveIcon: {
             foregroundImage: './assets/images/adaptive-icon.png',
             backgroundColor: '#ffffff',
         },
-        package: `com.taplogit${environmentSpecific('', '.stg', '.dev')}`,
+        package: `com.taplogit${environmentSpecific('', '.preview', '.development')}`,
     },
     web: {
         bundler: 'metro',
