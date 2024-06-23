@@ -32,7 +32,7 @@ const MIGRATIONS: string[] = [
                its.coalesce_by,
                its.view,
                MAX(taps.tapped_at),
-               COUNT(*)
+               COUNT(taps.tapped_at)
         FROM its
                  LEFT JOIN taps USING (it_id)
         GROUP BY its.it_id;
