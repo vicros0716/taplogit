@@ -1,12 +1,10 @@
 import { SQLiteProvider } from 'expo-sqlite';
-import { useContext, useEffect } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { WidgetConfigurationScreenProps } from 'react-native-android-widget';
 import { Button, PaperProvider, Text } from 'react-native-paper';
 import { DATABASE_NAME } from '@/db/constants';
 import { initializeDb } from '@/db/initializeDb';
-import { ItsContext } from '@/its/ItsContext';
-import ItsContextProvider from '@/its/ItsContextProvider';
+import { ItsProvider, useIts } from '@/its/ItsContext';
 import TapWidgIt from '@/widgets/TapWidgIt';
 import useWidgetsRepository from '@/widgets/useWidgetsRepository';
 
@@ -14,21 +12,17 @@ export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps)
     return (
         <SQLiteProvider databaseName={DATABASE_NAME} onInit={initializeDb}>
             <PaperProvider>
-                <ItsContextProvider>
+                <ItsProvider>
                     <ProvidedWidgetConfigurationScreen {...props} />
-                </ItsContextProvider>
+                </ItsProvider>
             </PaperProvider>
         </SQLiteProvider>
     );
 }
 
 function ProvidedWidgetConfigurationScreen({ widgetInfo, setResult, renderWidget }: WidgetConfigurationScreenProps) {
-    const { its, refreshIts } = useContext(ItsContext);
+    const its = useIts();
     const widgetsRepository = useWidgetsRepository();
-
-    useEffect(() => {
-        refreshIts();
-    }, []);
 
     return (
         <View style={styles.container}>

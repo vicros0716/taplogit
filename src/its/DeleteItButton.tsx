@@ -1,14 +1,14 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { RectButton } from 'react-native-gesture-handler';
 import { Button, Dialog, IconButton, Portal, Text } from 'react-native-paper';
 import { getSQLiteErrorCode } from '@/db/getSQLiteErrorCode';
 import { It } from '@/its/It';
-import { ItsContext } from '@/its/ItsContext';
+import { useRefreshIts } from '@/its/ItsContext';
 import useItsRepository from '@/its/useItsRepository';
 
 export default function DeleteItButton({ it }: { it: It }) {
     const itsRepository = useItsRepository();
-    const { refreshIts } = useContext(ItsContext);
+    const [, refreshIts] = useRefreshIts();
     const [visible, setVisible] = useState(false);
     const [errorCode, setErrorCode] = useState('');
     const dismiss = () => {

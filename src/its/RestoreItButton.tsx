@@ -1,13 +1,12 @@
-import { useContext } from 'react';
 import { RectButton } from 'react-native-gesture-handler';
 import { IconButton } from 'react-native-paper';
 import { It } from '@/its/It';
-import { ItsContext } from '@/its/ItsContext';
+import { useRefreshIts } from '@/its/ItsContext';
 import useItsRepository from '@/its/useItsRepository';
 
 export default function RestoreItButton({ it }: { it: It }) {
     const itsRepository = useItsRepository();
-    const { refreshIts } = useContext(ItsContext);
+    const [, refreshIts] = useRefreshIts();
 
     // TODO(polish): Set a loading indicator after pressing Restore
     return (

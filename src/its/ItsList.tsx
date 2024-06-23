@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { IconButton, Portal, Snackbar, Text, useTheme } from 'react-native-paper';
@@ -8,23 +8,14 @@ import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventType
 import DeleteItButton from '@/its/DeleteItButton';
 import { It } from '@/its/It';
 import { ItDialogContext } from '@/its/ItDialogContext';
-import { ItsContext } from '@/its/ItsContext';
+import { useIts, useRefreshIts } from '@/its/ItsContext';
 import RestoreItButton from '@/its/RestoreItButton';
 import useTapsRepository from '@/taps/useTapsRepository';
 
 export default function ItsList({ onScroll }: { onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void }) {
-    const { its, refreshIts, showDeleted } = useContext(ItsContext);
+    const its = useIts();
+    const [refreshing, refreshIts] = useRefreshIts();
     const { show } = useContext(ItDialogContext);
-    const [refreshing, setRefreshing] = useState(false);
-    useEffect(() => {
-        async function setup() {
-            setRefreshing(true);
-            await refreshIts();
-            setRefreshing(false);
-        }
-
-        setup();
-    }, [showDeleted]);
     const theme = useTheme();
 
     return (
@@ -42,11 +33,7 @@ export default function ItsList({ onScroll }: { onScroll?: (event: NativeSynthet
             )}
             onScroll={onScroll}
             refreshing={refreshing}
-            onRefresh={async () => {
-                setRefreshing(true);
-                await refreshIts();
-                setRefreshing(false);
-            }}
+            onRefresh={refreshIts}
             style={{ backgroundColor: theme.colors.surface }}
         />
     );

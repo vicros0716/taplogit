@@ -1,16 +1,15 @@
 import { Link, Stack } from 'expo-router';
-import { useContext } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { IconButton, Switch, Text, useTheme } from 'react-native-paper';
 import useScrollExtended from '@/hooks/useScrollExtended';
 import CreateItFAB from '@/its/CreateItFAB';
 import { EditItDialog } from '@/its/EditItDialog';
-import { ItsContext } from '@/its/ItsContext';
+import { useDeletedVisible } from '@/its/ItsContext';
 import ItsList from '@/its/ItsList';
 
 export default function HomeScreen() {
     const [isExtended, onScroll] = useScrollExtended();
-    const { showDeleted, setShowDeleted } = useContext(ItsContext);
+    const [deletedVisible, setDeletedVisible] = useDeletedVisible();
     const theme = useTheme();
     return (
         <SafeAreaView style={styles.container}>
@@ -25,7 +24,7 @@ export default function HomeScreen() {
                     headerRight: () => (
                         <>
                             <Text style={{ color: theme.colors.onPrimary }}>Show Deleted</Text>
-                            <Switch value={showDeleted} onValueChange={setShowDeleted} />
+                            <Switch value={deletedVisible} onValueChange={setDeletedVisible} />
                         </>
                     ),
                 }}

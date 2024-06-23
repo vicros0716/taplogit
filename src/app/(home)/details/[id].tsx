@@ -4,14 +4,17 @@ import { View } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
 import { ViewType } from '@/its/It';
 import { ItDialogContext } from '@/its/ItDialogContext';
-import { ItsContext } from '@/its/ItsContext';
+import { useIts, useRefreshIts } from '@/its/ItsContext';
+import useItsRepository from '@/its/useItsRepository';
 import TapsContextProvider from '@/taps/TapsContextProvider';
 import TapsPage from '@/taps/TapsPage';
 import { assertedNonNull } from '@/util/assert';
 
 export default function ItDetailsScreen() {
     const { id } = useLocalSearchParams();
-    const { itsRepository, its, refreshIts } = useContext(ItsContext);
+    const itsRepository = useItsRepository();
+    const [, refreshIts] = useRefreshIts();
+    const its = useIts();
     const { show } = useContext(ItDialogContext);
     const it = assertedNonNull(its.find((it) => it.id.toString() === id));
     const theme = useTheme();

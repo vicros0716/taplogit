@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Button, Dialog, Portal, SegmentedButtons, Text, TextInput } from 'react-native-paper';
 import { asValidCoalesceBy, asValidItType, DEFAULT_COALESCE_BY, DEFAULT_IT_TYPE } from '@/its/It';
 import { ItDialogContext } from '@/its/ItDialogContext';
-import { ItsContext } from '@/its/ItsContext';
+import { useRefreshIts } from '@/its/ItsContext';
 
 export function EditItDialog() {
     const { it, visible, save, hide } = useContext(ItDialogContext);
@@ -17,7 +17,7 @@ export function EditItDialog() {
         setCoalesceBy(it?.coalesceBy ?? DEFAULT_COALESCE_BY);
     }, [it]);
 
-    const { refreshIts } = useContext(ItsContext);
+    const [, refreshIts] = useRefreshIts();
 
     // TODO(polish): Set a loading indicator after pressing Create
     return (
