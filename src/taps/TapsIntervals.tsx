@@ -1,44 +1,44 @@
-import dayjs from 'dayjs';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
-import { Tap } from '@/taps/Tap';
-import { useTaps, useTapsRefresh } from '@/taps/TapsContext';
+import { StyleSheet } from 'react-native';
+import { DataTable } from 'react-native-paper';
+import { useEnum } from '@/hooks/useEnum';
+import { useTaps } from '@/taps/TapsContext';
 import { aggregateAsSwitch } from '@/taps/TapsListHelpers';
 
 export function TapsIntervals() {
-    const theme = useTheme();
-    const [refreshing, refresh] = useTapsRefresh();
+    const [sortDirection, next] = useEnum(['descending', 'ascending'] as const);
     const taps = useTaps();
     const tapPairs = aggregateAsSwitch(taps);
-    return (
-        <FlatList
-            data={tapPairs}
-            renderItem={({ item: [startTap, endTap] }) => <TapsIntervalsItem startTap={startTap} endTap={endTap} />}
-            refreshing={refreshing}
-            onRefresh={refresh}
-            style={{ backgroundColor: theme.colors.surface }}
-        />
-    );
-}
-
-function TapsIntervalsItem({ startTap, endTap }: { startTap: Tap; endTap: Tap }) {
-    const duration = dayjs.duration(endTap.tappedAt.diff(startTap.tappedAt)).humanize();
-    let text: string;
-    if (startTap.tappedAt.isSame(endTap.tappedAt, 'date')) {
-        text = `${startTap.tappedAt.format('MMM D, YYYY')} from ${startTap.tappedAt.format('hh:mm A')} to ${endTap.id < 0 ? 'Now' : endTap.tappedAt.format('hh:mm A')}: ${duration}`;
-    } else {
-        text = `From ${startTap.tappedAt.format('MMM D, YYYY @ hh:mm A')} to ${endTap.id < 0 ? 'Now' : endTap.tappedAt.format('MMM D, YYYY @ hh:mm A')}: ${duration}`;
+    if (sortDirection === 'ascending') {
+        tapPairs.reverse();
     }
     return (
-        <View style={styles.itemContainer}>
-            <Text variant="bodyMedium">{text}</Text>
-        </View>
+        <DataTable style={{ backgroundColor: 'transparent' }}>
+            <DataTable.Header>
+                <DataTable.Title textStyle={styles.title} sortDirection={sortDirection} onPress={next}>
+                    Start
+                </DataTable.Title>
+                <DataTable.Title textStyle={styles.title}>End</DataTable.Title>
+            </DataTable.Header>
+            {tapPairs.map(([startTap, endTap], index) => (
+                <DataTable.Row key={index}>
+                    <DataTable.Cell textStyle={styles.cell}>
+                        {startTap.tappedAt.format('MMM D, YYYY @ hh:mm A')}
+                    </DataTable.Cell>
+                    <DataTable.Cell textStyle={styles.cell}>
+                        {endTap.id < 0 ? 'Now' : endTap.tappedAt.format('MMM D, YYYY @ hh:mm A')}
+                    </DataTable.Cell>
+                </DataTable.Row>
+            ))}
+        </DataTable>
     );
 }
 
 const styles = StyleSheet.create({
-    itemContainer: {
-        height: 48,
-        padding: 12,
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    cell: {
+        fontSize: 14,
     },
 });

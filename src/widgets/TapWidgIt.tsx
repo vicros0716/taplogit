@@ -1,6 +1,6 @@
 import { FlexWidget, SvgWidget, TextWidget } from 'react-native-android-widget';
 import { It } from '@/its/It';
-import { GestureTapSvg, ToggleSwitchSvg, ToggleSwitchOffSvg } from '@/util/svgs';
+import { GestureTapSvg, ToggleSwitchOffSvg, ToggleSwitchSvg } from '@/util/svgs';
 
 export default function TapWidgIt({ it }: { it: It }) {
     switch (it.type) {
