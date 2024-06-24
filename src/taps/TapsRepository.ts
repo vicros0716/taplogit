@@ -34,7 +34,7 @@ export class TapsRepository {
         console.debug(`Creating new tap for ${it.name}`);
         const result = await this.db.runAsync('INSERT INTO taps (it_id) VALUES (?)', it.id);
         console.debug(`Created new tap for ${it.name}, id: ${result.lastInsertRowId}`);
-        eventBus.dispatch('onCreateTap', { it: { ...it, latestTap: dayjs() } });
+        eventBus.dispatch('onCreateTap', { it: { ...it, latestTap: dayjs(), numberOfTaps: it.numberOfTaps + 1 } });
         return result;
     }
 
