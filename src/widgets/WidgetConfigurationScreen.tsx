@@ -1,7 +1,7 @@
 import { SQLiteProvider } from 'expo-sqlite';
-import { FlatList, StyleSheet, useColorScheme, View } from 'react-native';
+import { FlatList, Pressable, SafeAreaView, StyleSheet, useColorScheme, View } from 'react-native';
 import { WidgetConfigurationScreenProps } from 'react-native-android-widget';
-import { Button, PaperProvider, Text } from 'react-native-paper';
+import { Appbar, Icon, PaperProvider, Text, useTheme } from 'react-native-paper';
 import { darkTheme } from '@/constants/darkTheme';
 import { lightTheme } from '@/constants/lightTheme';
 import { DATABASE_NAME } from '@/db/constants';
@@ -25,41 +25,58 @@ export function WidgetConfigurationScreen(props: WidgetConfigurationScreenProps)
 
 function ProvidedWidgetConfigurationScreen({ widgetInfo, setResult, renderWidget }: WidgetConfigurationScreenProps) {
     const its = useIts();
+    const theme = useTheme();
     const widgetsRepository = useWidgetsRepository();
 
     return (
-        <View style={styles.container}>
-            <Text variant="titleLarge" style={styles.title}>
-                Configure your Tap Widget
-            </Text>
+        <SafeAreaView>
+            <Appbar.Header mode="center-aligned" style={{ backgroundColor: theme.colors.primary }}>
+                <Appbar.Action icon="close" color={theme.colors.onPrimary} onPress={() => setResult('cancel')} />
+                <Appbar.Content
+                    title="Configure your Tap Widget"
+                    titleStyle={{ color: theme.colors.onPrimary, fontWeight: 'bold' }}
+                />
+            </Appbar.Header>
             <FlatList
                 data={its}
                 renderItem={({ item: it }) => (
-                    <Button
-                        mode="contained"
+                    <Pressable
                         onPress={async () => {
                             await widgetsRepository.associateWidget(it.id, widgetInfo.widgetId);
                             renderWidget(<TapWidgIt it={it} />);
                             setResult('ok');
                         }}>
-                        {it.name}
-                    </Button>
+                        <View style={styles.button}>
+                            <Text variant="titleLarge">{it.name}</Text>
+                            <Icon
+                                source={
+                                    it.type === 'tap'
+                                        ? 'gesture-tap'
+                                        : it.numberOfTaps % 2 === 0
+                                          ? 'toggle-switch-off-outline'
+                                          : 'toggle-switch-outline'
+                                }
+                                size={30}
+                            />
+                        </View>
+                    </Pressable>
                 )}
-                style={styles.list}
             />
-            <Button onPress={() => setResult('cancel')}>Cancel</Button>
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    title: {
-        textAlign: 'center',
-    },
-    list: {
-        margin: 12,
+    button: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderRadius: 14,
+        height: 44,
+        margin: 4,
+        padding: 4,
+        paddingLeft: 12,
+        paddingRight: 12,
     },
 });

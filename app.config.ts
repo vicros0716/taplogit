@@ -15,15 +15,15 @@ function environmentSpecific(production: string, preview: string, development: s
 const widgetConfig: WithAndroidWidgetsParams = {
     widgets: [
         {
-            name: 'TapWidgIt',
-            label: 'Tap WidgIt',
-            minWidth: '180dp',
-            minHeight: '40dp',
-            resizeMode: 'horizontal|vertical',
-            targetCellWidth: 3,
-            targetCellHeight: 0,
             description: 'Tap WidgIt',
+            label: 'Tap WidgIt',
+            minHeight: '40dp',
+            minWidth: '40dp',
+            name: 'TapWidgIt',
             previewImage: './assets/widget-preview/tapwidgit.png',
+            resizeMode: 'horizontal|vertical',
+            targetCellHeight: 0,
+            targetCellWidth: 2,
             widgetFeatures: 'reconfigurable',
         },
     ],
