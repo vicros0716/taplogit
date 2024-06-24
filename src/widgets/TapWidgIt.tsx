@@ -18,7 +18,7 @@ export default function TapWidgIt({ it }: { it: It }) {
         case 'switch':
             const switchOpen = it.numberOfTaps % 2 === 0;
             return (
-                <FlexWidget style={styles.container} clickAction="SWITCH" clickActionData={{ it }}>
+                <FlexWidget style={styles.container} clickAction="TAP" clickActionData={{ it }}>
                     <SvgWidget svg={switchOpen ? ToggleSwitchOffSvg : ToggleSwitchSvg} style={styles.icon} />
                     <TextWidget text={it.name} style={styles.text} />
                 </FlexWidget>
